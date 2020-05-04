@@ -1,24 +1,23 @@
-/**应用的根zujian */
+import React, {Component} from 'react'
+import {HashRouter, Route, Switch} from 'react-router-dom'
 
-import React, { Component } from "react";
-import {BrowserRouter,Route,Switch} from "react-router-dom";
-import WrapLogin from "./pages/login/login";
-import Homepage from "./pages/home/homepage";
-import Admin from "./pages/admin/admin";
+import Login from './pages/login/login'
+import Admin from './pages/admin/admin'
 
+/*
+应用的根组件
+ */
 export default class App extends Component {
 
-    render() {
-        return (
-        <div>
-            <BrowserRouter>
-            <Switch>
-            <Route path="/" exact component={Homepage}></Route>
-            <Route path="/login" component={WrapLogin}></Route>
-            <Route path="/admin" component={Admin}></Route>
-            </Switch>
-            </BrowserRouter>
-        </div>)
 
-    }
+  render () {
+    return (
+      <HashRouter>
+        <Switch> {/*只匹配其中一个*/}
+          <Route path='/login' component={Login}></Route>
+          <Route path='/' component={Admin}></Route>
+        </Switch>
+      </HashRouter>
+    )
+  }
 }

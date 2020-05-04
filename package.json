@@ -1,11 +1,11 @@
 {
-  "name": "graduation-client",
+  "name": "admin-client_final",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@antv/data-set": "^0.10.2",
-    "antd": "^4.2.0",
-    "axios": "^0.18.0",
+    "antd": "^3.17.0",
+    "axios": "^0.18.1",
     "babel-plugin-import": "^1.11.0",
     "bizcharts": "^3.5.2",
     "customize-cra": "^0.2.12",
@@ -17,6 +17,7 @@
     "jsonp": "^0.2.1",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
+    "moment": "2.24.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-app-rewired": "^2.1.3",

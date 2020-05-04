@@ -5,13 +5,12 @@ module.exports = override(
   fixBabelImports('import', {
     libraryName: 'antd',
     libraryDirectory: 'es',
-    style: true,  // 自动打包相关的样式[style:true是加载编译之前的源文件less]
+    style: true,  // 自动打包相关的样式
   }),
 
   // 使用less-loader对源码中的less的变量进行重新指定
   addLessLoader({
     javascriptEnabled: true,
-    //antd定制主题  可在antd文档中查看
     modifyVars: {'@primary-color': '#1DA57A'},
   }),
 )
