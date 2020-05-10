@@ -1,8 +1,9 @@
 {
-  "name": "admin-client_final",
+  "name": "zmx-graduation-project",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^4.1.0",
     "@antv/data-set": "^0.10.2",
     "antd": "^3.17.0",
     "axios": "^0.18.1",

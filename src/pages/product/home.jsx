@@ -89,7 +89,7 @@ export default class ProductHome extends Component {
   showDetail = (procut) => {
     // 缓存product对象 ==> 给detail组件使用
     memoryUtils.product = procut
-    this.props.history.push('/product/detail')
+    this.props.history.push('/admin/product/detail')
   }
 
   /*
@@ -98,7 +98,7 @@ export default class ProductHome extends Component {
   showUpdate = (procut) => {
     // 缓存product对象 ==> 给detail组件使用
     memoryUtils.product = procut
-    this.props.history.push('/product/addupdate')
+    this.props.history.push('/admin/product/addupdate')
   }
 
   /*
@@ -175,7 +175,7 @@ export default class ProductHome extends Component {
     )
 
     const extra = (
-      <Button type='primary' onClick={() => this.props.history.push('/product/addupdate')}>
+      <Button type='primary' onClick={() => this.props.history.push('/admin/product/addupdate')}>
         <Icon type='plus'/>
         添加商品
       </Button>

@@ -172,8 +172,8 @@ class LeftNav extends Component {
     // 得到当前请求的路由路径
     let path = this.props.location.pathname
     console.log('render()', path)
-    if(path.indexOf('/product')===0) { // 当前请求的是商品或其子路由界面
-      path = '/product'
+    if(path.indexOf('/admin/product')===0) { // 当前请求的是商品或其子路由界面
+      path = 'admin/product'
     }
 
     // 得到需要打开菜单项的key
@@ -183,7 +183,7 @@ class LeftNav extends Component {
       <div className="left-nav">
         <Link to='/' className="left-nav-header">
           <img src={logo} alt="logo"/>
-          <h1>硅谷后台</h1>
+          <h1>管理中心</h1>
         </Link>
 
         <Menu

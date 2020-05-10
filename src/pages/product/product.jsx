@@ -14,10 +14,10 @@ export default class Product extends Component {
   render() {
     return (
       <Switch>
-        <Route path='/product' component={ProductHome} exact/> {/*路径完全匹配*/}
-        <Route path='/product/addupdate' component={ProductAddUpdate}/>
-        <Route path='/product/detail' component={ProductDetail}/>
-        <Redirect to='/product'/>
+        <Route path='/admin/product' component={ProductHome} exact/> {/*路径完全匹配*/}
+        <Route path='/admin/product/addupdate' component={ProductAddUpdate}/>
+        <Route path='/admin/product/detail' component={ProductDetail}/>
+        <Redirect to='/admin/product'/>
       </Switch>
     )
   }
