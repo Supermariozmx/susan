@@ -78,7 +78,7 @@ class Login extends Component {
     // 如果用户已经登陆, 自动跳转到管理界面
     const user = this.props.user
     if(user && user._id) {
-      return <Redirect to='/home'/>
+      return <Redirect to='/'/>
     }
 
     // 得到具强大功能的form对象
@@ -89,7 +89,7 @@ class Login extends Component {
       <div className="login">
         <header className="login-header">
           <img src={logo} alt="logo"/>
-          <h1>React项目: 后台管理系统</h1>
+          <h1>欢迎来到Only For You-</h1>
         </header>
         <section className="login-content">
           <div className={user.errorMsg ? 'error-msg show' : 'error-msg'}>{user.errorMsg}</div>

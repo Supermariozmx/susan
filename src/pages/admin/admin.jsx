@@ -4,7 +4,7 @@ import { Layout } from 'antd'
 import {connect} from 'react-redux'
 
 import LeftNav from '../../components/left-nav'
-import Header from '../../components/header'
+import HeaderView from '../../components/header'
 import Home from '../home/home'
 import Category from '../category/category'
 import Product from '../product/product'
@@ -35,10 +35,10 @@ class Admin extends Component {
           <LeftNav/>
         </Sider>
         <Layout>
-          <Header>Header</Header>
+          <HeaderView>Header</HeaderView>
           <Content style={{margin: 20, backgroundColor: '#fff'}}>
             <Switch>
-              <Redirect exact from='/' to='admin/home'/>
+              {/* <Redirect exact from='/' to='admin/home'/> */}
               <Route path='/admin' component={Home}/>
               <Route path='/admin/category' component={Category}/>
               <Route path='/admin/product' component={Product}/>

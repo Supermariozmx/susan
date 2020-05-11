@@ -1,19 +1,19 @@
-import React, {Component} from 'react'
-import {withRouter} from 'react-router-dom'
-import { Modal} from 'antd'
-import {connect} from 'react-redux'
+import React, { Component } from 'react'
+import { withRouter, Link } from 'react-router-dom'
+import { Modal, Button } from 'antd'
+import { connect } from 'react-redux'
 
-import LinkButton from '../link-button'
-import {reqWeather} from '../../api'
+// import LinkButton from '../link-button'
+import { reqWeather } from '../../api'
 import menuList from '../../config/menuConfig'
-import {formateDate} from '../../utils/dateUtils'
+import { formateDate } from '../../utils/dateUtils'
 import './index.less'
-import {logout} from '../../redux/actions'
+import { logout } from '../../redux/actions'
 
 /*
 左侧导航的组件
  */
-class Header extends Component {
+class HeaderView extends Component {
 
   state = {
     currentTime: formateDate(Date.now()), // 当前时间字符串
@@ -25,15 +25,15 @@ class Header extends Component {
     // 每隔1s获取当前时间, 并更新状态数据currentTime
     this.intervalId = setInterval(() => {
       const currentTime = formateDate(Date.now())
-      this.setState({currentTime})
+      this.setState({ currentTime })
     }, 1000)
   }
 
   getWeather = async () => {
     // 调用接口请求异步获取数据
-    const {dayPictureUrl, weather} = await reqWeather('北京')
+    const { dayPictureUrl, weather } = await reqWeather('北京')
     // 更新状态
-    this.setState({dayPictureUrl, weather})
+    this.setState({ dayPictureUrl, weather })
   }
 
   getTitle = () => {
@@ -41,13 +41,13 @@ class Header extends Component {
     const path = this.props.location.pathname
     let title
     menuList.forEach(item => {
-      if (item.key===path) { // 如果当前item对象的key与path一样,item的title就是需要显示的title
+      if (item.key === path) { // 如果当前item对象的key与path一样,item的title就是需要显示的title
         title = item.title
       } else if (item.children) {
         // 在所有子item中查找匹配的
-        const cItem = item.children.find(cItem => path.indexOf(cItem.key)===0)
+        const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
         // 如果有值才说明有匹配的
-        if(cItem) {
+        if (cItem) {
           // 取出它的title
           title = cItem.title
         }
@@ -74,7 +74,7 @@ class Header extends Component {
   第一次render()之后执行一次
   一般在此执行异步操作: 发ajax请求/启动定时器
    */
-  componentDidMount () {
+  componentDidMount() {
     // 获取当前的时间
     this.getTime()
     // 获取当前天气
@@ -89,7 +89,7 @@ class Header extends Component {
   /*
   当前组件卸载之前调用
    */
-  componentWillUnmount () {
+  componentWillUnmount() {
     // 清除定时器
     clearInterval(this.intervalId)
   }
@@ -97,33 +97,65 @@ class Header extends Component {
 
   render() {
 
-    const {currentTime, dayPictureUrl, weather} = this.state
+    const { currentTime, dayPictureUrl, weather } = this.state
 
     const username = this.props.user.username
+
+    console.log("------user", this.props.user)
 
     // 得到当前需要显示的title
     // const title = this.getTitle()
     const title = this.props.headTitle
+    const { user } = this.props
     return (
       <div className="header">
         <div className="header-top">
-          <span>欢迎, {username}</span>
-          <LinkButton onClick={this.logout}>退出</LinkButton>
+
+          <span>欢迎来到Only for You - {username}</span>
+          {/* <LinkButton onClick={this.logout}>退出</LinkButton> */}
+
+          {(!user || !user._id) &&
+            < Button type="primary" primary className="action-item">
+              <Link to='/login'>
+                <span>登录</span>
+              </Link>
+            </Button>
+          }
+          <Button type="primary" primary className="action-item">
+            <Link to='/register'>
+              <span>注册</span>
+            </Link>
+          </Button>
+          {user ?
+            <Button type="primary" primary className="action-item">
+              <Link to='/admin'>
+                <span>管理</span>
+              </Link></Button>
+            : null
+          }
+          <Button
+            type="primary"
+            primary
+            className="action-item"
+            onClick={this.logout}
+          >
+            退出
+          </Button>
         </div>
         <div className="header-bottom">
           <div className="header-bottom-left">{title}</div>
           <div className="header-bottom-right">
             <span>{currentTime}</span>
-            <img src={dayPictureUrl} alt="weather"/>
+            <img src={dayPictureUrl} alt="weather" />
             <span>{weather}</span>
           </div>
         </div>
-      </div>
+      </div >
     )
   }
 }
 
 export default connect(
-  state => ({headTitle: state.headTitle, user: state.user}),
-  {logout}
-)(withRouter(Header))
+  state => ({ headTitle: state.headTitle, user: state.user }),
+  { logout }
+)(withRouter(HeaderView))

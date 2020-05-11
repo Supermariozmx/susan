@@ -43,6 +43,7 @@ class LeftNav extends Component {
   */
   getMenuNodes_map = (menuList) => {
     return menuList.map(item => {
+      console.log("-------------menuList",item)
       /*
         {
           title: '首页', // 菜单标题名称
@@ -165,6 +166,7 @@ class LeftNav extends Component {
    */
   componentWillMount () {
     this.menuNodes = this.getMenuNodes(menuList)
+    console.log("test if execute getMenuNodes")
   }
 
   render() {
