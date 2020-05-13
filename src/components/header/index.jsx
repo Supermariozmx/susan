@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter, Link } from 'react-router-dom'
 import { Modal, Button } from 'antd'
 import { connect } from 'react-redux'
+import { ShoppingCartOutlined } from '@ant-design/icons';
 
 // import LinkButton from '../link-button'
 import { reqWeather } from '../../api'
@@ -121,11 +122,12 @@ class HeaderView extends Component {
               </Link>
             </Button>
           }
-          <Button type="primary" primary className="action-item">
+          {user.isAdmin && <Button type="primary" primary className="action-item">
             <Link to='/register'>
               <span>注册</span>
             </Link>
-          </Button>
+          </Button>}
+          <ShoppingCartOutlined key="" className="header-icon" />
           {user.isAdmin ?
             <Button type="primary" primary className="action-item">
               <Link to='/admin'>
@@ -133,14 +135,14 @@ class HeaderView extends Component {
               </Link></Button>
             : null
           }
-          <Button
+          {user.isAdmin && <Button
             type="primary"
             primary
             className="action-item"
             onClick={this.logout}
           >
             退出
-          </Button>
+          </Button>}
         </div>
         <div className="header-bottom">
           <div className="header-bottom-left">{title}</div>

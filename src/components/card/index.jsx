@@ -37,7 +37,10 @@ class ClothingCard extends Component {
         }
 
     }
-    showDetail = () => { }
+    showDetail = (item) => {
+        console.log("-==========test if execute show detail")
+        this.props.history.push({ pathname: `/product/detail/${item._id}` });
+    }
     render() {
         const { renderData } = this.state;
         console.log("----------------------------renderData", renderData)
@@ -58,8 +61,8 @@ class ClothingCard extends Component {
                                     }
                                     actions={
                                         [
-                                            <PictureTwoTone />,
-                                            <ShoppingCartOutlined key="" onClick={this.showDetail(item)} />
+                                            <PictureTwoTone    onClick={() => { this.showDetail(item) }}/>,
+                                            <ShoppingCartOutlined key="" onClick={() => { this.showDetail(item) }} />
                                         ]}
                                 >
                                     <Meta

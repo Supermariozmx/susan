@@ -6,6 +6,7 @@ import Admin from './pages/admin/admin'
 import Main from "./pages/main/main"
 // import ClothingCard from './components/card'
 import Register from './pages/register/register'
+// import Culture from "./pages/culture/culture"
 /*
 应用的根组件
  */
@@ -22,6 +23,7 @@ export default class App extends Component {
           <Route path='/register' component={Register}></Route>
           <Route path='/login' component={Login}></Route>
           <Route path='/main' component={Main}></Route>
+          {/* <Route key="detail"  path="/product/detail/:id([a-zA-Z0-9\\-]{36})" component={Culture} />, */}
         </Switch>
       </BrowserRouter>
     )
