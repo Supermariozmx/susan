@@ -7,11 +7,12 @@ import ClothingCard from "../../components/card"
 // import DiscountCarousel from '../../components/carousel'
 import HeaderView from '../../components/header'
 import Culture from "../culture/culture"
+import ShopMap from "../map/map"
 
 import logo from '../../assets/images/logo.png'
 import "./main.less"
 import "../../components/left-nav/index.less"
-import "../culture/culture"
+import ClothingDetail from "../detail/detail"
 
 // const { Search } = Input;
 const { Content, Sider, Footer } = Layout;
@@ -125,15 +126,16 @@ class Main extends Component {
                             <Switch>
                                 <Redirect exact from='/main' to='main/discount' />
                                 {/* <Route path='/main/discount' component={DiscountCarousel} /> */}
-                                <Route path='/main/new' component={ClothingCard} />
-                                <Route path='/main/map' component={Culture} />
+                                <Route path='/main/culture' component={Culture} />
+                                <Route path='/main/map' component={ShopMap} />
                                 <Route path='/main/man/jacket/5eb7b9a7f70c283f343efc1f' component={ClothingCard} />
                                 <Route path='/main/man/pants/5eba861d948cc133e0f7e001' component={ClothingCard} />
                                 <Route path='/main/woman/jacket/5eb7b9d0f70c283f343efc21' component={ClothingCard} />
                                 <Route path='/main/woman/pants/5ebb8db739d9ef548870e465' component={ClothingCard} />
-                                <Route path='/main/woman/dress/5eb7b9bbf70c283f343efc20' component={ClothingCard} />                
+                                <Route path='/main/woman/dress/5eb7b9bbf70c283f343efc20' component={ClothingCard} />
+
                                 {/* <Route component={NotFound} /> */}
-                                <Route key="detail"  path="/main/detail/:id([a-zA-Z0-9\\-]{36})" component={Culture} />,
+                                <Route key="detail" path="/main/detail/:id" component={ClothingDetail} />,
                             </Switch>
                         </Content>
                         <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
