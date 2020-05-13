@@ -33,13 +33,13 @@ export default class Category extends Component {
   initColumns = () => {
     this.columns = [
       {
-        title: '分类的名称',
+        title: '分类名称',
         dataIndex: 'name', // 显示数据对应的属性名
       },
       {
         title: '操作',
         width: 300,
-        render: (category) => ( // 返回需要显示的界面标签
+        render: (category) => ( // 这个render里面传的category是每行显示的category的值
           <span>
             <LinkButton onClick={() => this.showUpdate(category)}>修改分类</LinkButton>
             {/*如何向事件回调函数传递参数: 先定义一个匿名函数, 在函数调用处理的函数并传入数据*/}
@@ -108,7 +108,7 @@ export default class Category extends Component {
   显示指定一级分类列表
    */
   showCategorys = () => {
-    // 更新为显示一列表的状态
+    // 更新为显示一级列表的状态
     this.setState({
       parentId: '0',
       parentName: '',

@@ -190,7 +190,7 @@ class LeftNav extends Component {
 
         <Menu
           mode="inline"
-          theme="dark"
+          theme="compact"
           selectedKeys={[path]}
           defaultOpenKeys={[openKey]}
         >

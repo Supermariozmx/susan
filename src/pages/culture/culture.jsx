@@ -4,15 +4,13 @@ import "./test.less"
 /*
 应用的根组件
  */
-export default class Test extends Component {
+export default class Culture extends Component {
 
 
     render() {
         return (
             <div className="test">
-                <h1> aaaaaaaaaaaaaaaaaaaa
-                    拜托成功吧
-                </h1>
+                <h1> 服装文化</h1>
             </div>
         )
     }

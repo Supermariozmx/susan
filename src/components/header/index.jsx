@@ -101,7 +101,7 @@ class HeaderView extends Component {
 
     const username = this.props.user.username
 
-    console.log("------user", this.props.user)
+    // console.log("------user", this.props.user)
 
     // 得到当前需要显示的title
     // const title = this.getTitle()
@@ -126,7 +126,7 @@ class HeaderView extends Component {
               <span>注册</span>
             </Link>
           </Button>
-          {user ?
+          {user.isAdmin ?
             <Button type="primary" primary className="action-item">
               <Link to='/admin'>
                 <span>管理</span>

@@ -36,7 +36,8 @@ export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/manage/product/l
 // 更新商品的状态(上架/下架)
 export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/product/updateStatus', {productId, status}, 'POST')
 
-
+// 获取不同种类商品
+export const reqVarietyProduct= (categoryId) => ajax(BASE + '/main/product/category', {categoryId})
 
 /*
 搜索商品分页列表 (根据商品名称/商品描述)
