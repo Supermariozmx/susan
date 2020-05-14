@@ -18,6 +18,12 @@ import ClothingDetail from "../detail/detail"
 const { Content, Sider, Footer } = Layout;
 const { SubMenu } = Menu;
 
+
+const IconFont = Icon.createFromIconfontCN({
+    scriptUrl: '//at.alicdn.com/t/font_1818861_yrxd09gtnpg.js',
+    
+  });
+
 class Main extends Component {
 
     handleContent = () => {
@@ -58,34 +64,34 @@ class Main extends Component {
                             </Menu.Item> */}
                             <Menu.Item key="/main/map">
                                 <Link to='/main/map'>
-                                    <Icon type="search" />
+                                    <IconFont type="iconmap-shop" />
                                     <span>附近门店</span>
                                 </Link>
                             </Menu.Item>
                             <Menu.Item key="/main/culture"
                             >
                                 <Link to='/main/culture'>
-                                    <Icon type="shopping" />
+                                    <IconFont type="iconculture1" />
                                     <span>服装文化</span>
                                 </Link>
                             </Menu.Item>
                             <SubMenu key="man"
                                 title={
                                     <span>
-                                        <Icon type="man" />
+                                        <IconFont type="iconboy" />
                                         <span>男士服装</span>
                                     </span>
                                 }
                             >
                                 <Menu.Item key="/main/man/jacket/5eb7b9a7f70c283f343efc1f">
                                     <Link to='/main/man/jacket/5eb7b9a7f70c283f343efc1f'>
-                                        <Icon type="man" />
+                                        <IconFont type="iconman-t" />
                                         <span>上装</span>
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="/main/man/pants/5eba861d948cc133e0f7e001">
                                     <Link to='/main/man/pants/5eba861d948cc133e0f7e001'>
-                                        <Icon type="man" />
+                                        <IconFont type="iconman-pants" />
                                         <span>下装</span>
                                     </Link>
                                 </Menu.Item>
@@ -93,26 +99,26 @@ class Main extends Component {
                             <SubMenu key="woman"
                                 title={
                                     <span>
-                                        <Icon type="woman" />
+                                        <IconFont type="icongirl" />
                                         <span>女士服装</span>
                                     </span>
                                 }
                             >
                                 <Menu.Item key="/main/woman/jacket/5eb7b9d0f70c283f343efc21">
                                     <Link to='/main/woman/jacket/5eb7b9d0f70c283f343efc21'>
-                                        <Icon type="woman" />
+                                        <IconFont type="iconwoman-tshit" />
                                         <span>上装</span>
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="/main/woman/pants/5ebb8db739d9ef548870e465">
                                     <Link to='/main/woman/pants/5ebb8db739d9ef548870e465'>
-                                        <Icon type="woman" />
+                                        <IconFont type="iconwoman-skirt" />
                                         <span>下装</span>
                                     </Link>
                                 </Menu.Item>
                                 <Menu.Item key="/main/woman/dress/5eb7b9bbf70c283f343efc20">
                                     <Link to='/main/woman/dress/5eb7b9bbf70c283f343efc20'>
-                                        <Icon type="woman" />
+                                        <IconFont type="iconwoman-dress" />
                                         <span>连衣裙</span>
                                     </Link>
                                 </Menu.Item>
@@ -138,7 +144,7 @@ class Main extends Component {
                                 <Route key="detail" path="/main/detail/:id" component={ClothingDetail} />,
                             </Switch>
                         </Content>
-                        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+                        <Footer style={{ textAlign: 'center' }}>Anne.Zhang graduation project 2020</Footer>
                     </Layout>
                 </Layout>
 

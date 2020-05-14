@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter, Link } from 'react-router-dom'
-import { Modal, Button } from 'antd'
+import { Modal, Button,Icon } from 'antd'
 import { connect } from 'react-redux'
 import { ShoppingCartOutlined } from '@ant-design/icons';
 
@@ -10,6 +10,10 @@ import menuList from '../../config/menuConfig'
 import { formateDate } from '../../utils/dateUtils'
 import './index.less'
 import { logout } from '../../redux/actions'
+
+const IconFont = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_1818861_gjguvkt31rv.js',
+});
 
 /*
 左侧导航的组件
@@ -135,14 +139,13 @@ class HeaderView extends Component {
               </Link></Button>
             : null
           }
-          {user.isAdmin && <Button
-            type="primary"
-            primary
+          {user.isAdmin && <IconFont
+            type="iconlogout"
             className="action-item"
             onClick={this.logout}
           >
             退出
-          </Button>}
+          </IconFont>}
         </div>
         <div className="header-bottom">
           <div className="header-bottom-left">{title}</div>
