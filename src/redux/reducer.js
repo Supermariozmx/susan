@@ -1,7 +1,7 @@
 /*
 用来根据老的state和指定的action生成并返回新的state的函数
  */
-import {combineReducers} from 'redux'
+import { combineReducers } from 'redux'
 
 /*
 用来管理头部标题的reducer函数
@@ -11,7 +11,8 @@ import {
   SET_HEAD_TITLE,
   RECEIVE_USER,
   SHOW_ERROR_MSG,
-  RESET_USER
+  RESET_USER,
+  BUY_CLOTH
 } from './action-types'
 
 const initHeadTitle = ''
@@ -37,9 +38,27 @@ function user(state = initUser, action) {
     case SHOW_ERROR_MSG:
       const errorMsg = action.errorMsg
       // state.errorMsg = errorMsg  // 不要直接修改原本状态数据
-      return {...state, errorMsg}
+      return { ...state, errorMsg }
     case RESET_USER:
       return {}
+    default:
+      return state
+  }
+}
+
+const initPurchasedCloth = [
+  {
+    clothId: "",
+    clothNum: 1
+  }
+]
+
+function purchasedCloth(state = initPurchasedCloth, action) {
+  switch (action.type) {
+    case BUY_CLOTH:
+      console.log("=======action.clothId", action.clothId)
+      return action.clothId
+
     default:
       return state
   }
@@ -55,5 +74,6 @@ function user(state = initUser, action) {
  */
 export default combineReducers({
   headTitle,
-  user
+  user,
+  purchasedCloth
 })

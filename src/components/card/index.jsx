@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Card, Spin } from 'antd';
+import { connect } from 'react-redux'
 import { PictureTwoTone, ShoppingCartOutlined } from '@ant-design/icons';
 import { reqVarietyProduct } from "../../api/index"
 import { BASE_IMG_URL } from '../../utils/constants'
-
 import "./index.less"
-
+import { buyCloth } from '../../redux/actions'
 const { Meta } = Card;
 
 class ClothingCard extends Component {
@@ -42,6 +42,11 @@ class ClothingCard extends Component {
         this.props.history.push({ pathname: `/main/detail/${item._id}`, state: { item } });
         // this.props.history.push({""})
     }
+    buyCloth = (item) => {
+        const clothId = item._id;
+        this.props.buyCloth(clothId);
+
+    }
     render() {
         const { renderData } = this.state;
         console.log("----------------------------renderData", renderData)
@@ -63,7 +68,7 @@ class ClothingCard extends Component {
                                     actions={
                                         [
                                             <PictureTwoTone onClick={() => { this.showDetail(item) }} />,
-                                            <ShoppingCartOutlined key="" onClick={() => { this.showDetail(item) }} />
+                                            <ShoppingCartOutlined key="" onClick={() => { this.buyCloth(item) }} />
                                         ]}
                                 >
                                     <Meta
@@ -91,4 +96,9 @@ class ClothingCard extends Component {
     }
 }
 
-export default ClothingCard;
+// export default ClothingCard;
+
+export default connect(
+    state => ({ headTitle: state.headTitle, user: state.user }),
+    { buyCloth }
+)(ClothingCard)

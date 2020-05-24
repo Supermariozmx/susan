@@ -7,34 +7,35 @@ import {
   SET_HEAD_TITLE,
   RECEIVE_USER,
   SHOW_ERROR_MSG,
-  RESET_USER
+  RESET_USER,
+  BUY_CLOTH
 } from './action-types'
-import {reqLogin} from '../api'
+import { reqLogin } from '../api'
 import storageUtils from "../utils/storageUtils";
 
 /*
 设置头部标题的同步action
  */
-export const setHeadTitle = (headTitle) => ({type: SET_HEAD_TITLE, data: headTitle})
+export const setHeadTitle = (headTitle) => ({ type: SET_HEAD_TITLE, data: headTitle })
 
 /*
 接收用户的同步action
  */
-export const receiveUser = (user) => ({type: RECEIVE_USER, user})
+export const receiveUser = (user) => ({ type: RECEIVE_USER, user })
 
 /*
 显示错误信息同步action
  */
-export const showErrorMsg = (errorMsg) => ({type: SHOW_ERROR_MSG, errorMsg})
+export const showErrorMsg = (errorMsg) => ({ type: SHOW_ERROR_MSG, errorMsg })
 
 /*
 退出登陆的同步action
  */
-export const logout = () =>  {
+export const logout = () => {
   // 删除local中的user
   storageUtils.removeUser()
   // 返回action对象
-  return {type: RESET_USER}
+  return { type: RESET_USER }
 }
 
 /*
@@ -45,7 +46,7 @@ export const login = (username, password) => {
     // 1. 执行异步ajax请求
     const result = await reqLogin(username, password)  // {status: 0, data: user} {status: 1, msg: 'xxx'}
     // 2.1. 如果成功, 分发成功的同步action
-    if(result.status===0) {
+    if (result.status === 0) {
       const user = result.data
       // 保存local中
       storageUtils.saveUser(user)
@@ -59,3 +60,6 @@ export const login = (username, password) => {
 
   }
 }
+
+
+export const buyCloth = (clothId) => ({ type: BUY_CLOTH, clothId })

@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import {
   Card,
   Icon,
@@ -6,8 +6,8 @@ import {
 } from 'antd'
 
 import LinkButton from '../../components/link-button'
-import {BASE_IMG_URL} from '../../utils/constants'
-import {reqCategory} from '../../api'
+import { BASE_IMG_URL } from '../../utils/constants'
+import { reqCategory } from '../../api'
 import memoryUtils from "../../utils/memoryUtils";
 
 const Item = List.Item
@@ -23,14 +23,14 @@ export default class ProductDetail extends Component {
     cName2: '', // 二级分类名称
   }
 
-  async componentDidMount () {
+  async componentDidMount() {
 
     // 得到当前商品的分类ID
-    const {pCategoryId, categoryId} = memoryUtils.product
-    if(pCategoryId==='0') { // 一级分类下的商品
+    const { pCategoryId, categoryId } = memoryUtils.product
+    if (pCategoryId === '0') { // 一级分类下的商品
       const result = await reqCategory(categoryId)
       const cName1 = result.data.name
-      this.setState({cName1})
+      this.setState({ cName1 })
     } else { // 二级分类下的商品
       /*
       //通过多个await方式发多个请求: 后面一个请求是在前一个请求成功返回之后才发送
@@ -55,7 +55,7 @@ export default class ProductDetail extends Component {
   /*
  在卸载之前清除保存的数据
  */
-  componentWillUnmount () {
+  componentWillUnmount() {
     memoryUtils.product = {}
   }
 
@@ -63,15 +63,15 @@ export default class ProductDetail extends Component {
   render() {
 
     // 读取携带过来的state数据
-    const {name, desc, price, detail, imgs} = memoryUtils.product
-    const {cName1, cName2} = this.state
+    const { name, desc, price, detail, imgs } = memoryUtils.product
+    const { cName1, cName2 } = this.state
 
     const title = (
       <span>
         <LinkButton>
           <Icon
             type='arrow-left'
-            style={{marginRight: 10, fontSize: 20}}
+            style={{ marginRight: 10, fontSize: 20 }}
             onClick={() => this.props.history.goBack()}
           />
         </LinkButton>
@@ -96,12 +96,12 @@ export default class ProductDetail extends Component {
           </Item>
           <Item>
             <span className="left">所属分类:</span>
-            <span>{cName1} {cName2 ? ' --> '+cName2 : ''}</span>
+            <span>{cName1} {cName2 ? ' --> ' + cName2 : ''}</span>
           </Item>
           <Item>
             <span className="left">商品图片:</span>
             <span>
-              {
+              {imgs ?
                 imgs.map(img => (
                   <img
                     key={img}
@@ -110,12 +110,13 @@ export default class ProductDetail extends Component {
                     alt="img"
                   />
                 ))
+                : null
               }
             </span>
           </Item>
           <Item>
             <span className="left">商品详情:</span>
-            <span dangerouslySetInnerHTML={{__html: detail}}>
+            <span dangerouslySetInnerHTML={{ __html: detail }}>
             </span>
           </Item>
 

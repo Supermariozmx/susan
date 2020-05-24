@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter, Link } from 'react-router-dom'
-import { Modal, Button,Icon } from 'antd'
+import { Modal, Button, Icon, Drawer } from 'antd'
 import { connect } from 'react-redux'
 import { ShoppingCartOutlined } from '@ant-design/icons';
 
@@ -11,8 +11,9 @@ import { formateDate } from '../../utils/dateUtils'
 import './index.less'
 import { logout } from '../../redux/actions'
 
+
 const IconFont = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_1818861_gjguvkt31rv.js',
+  scriptUrl: '//at.alicdn.com/t/font_1818861_yrxd09gtnpg.js',
 });
 
 /*
@@ -24,6 +25,7 @@ class HeaderView extends Component {
     currentTime: formateDate(Date.now()), // 当前时间字符串
     dayPictureUrl: '', // 天气图片url
     weather: '', // 天气的文本
+    isDrawerVisible: false
   }
 
   getTime = () => {
@@ -99,10 +101,16 @@ class HeaderView extends Component {
     clearInterval(this.intervalId)
   }
 
-
+  onCartClick = () => {
+    const { isDrawerVisible } = this.state;
+    this.setState({ isDrawerVisible: !isDrawerVisible });
+  };
+  onDrawerClose = () => {
+    this.setState({ isDrawerVisible: false });
+  }
   render() {
 
-    const { currentTime, dayPictureUrl, weather } = this.state
+    const { currentTime, dayPictureUrl, weather,isDrawerVisible } = this.state
 
     const username = this.props.user.username
 
@@ -118,7 +126,6 @@ class HeaderView extends Component {
 
           <span>欢迎来到Only for You - {username}</span>
           {/* <LinkButton onClick={this.logout}>退出</LinkButton> */}
-
           {(!user || !user._id) &&
             < Button type="primary" primary className="action-item">
               <Link to='/login'>
@@ -131,7 +138,7 @@ class HeaderView extends Component {
               <span>注册</span>
             </Link>
           </Button>}
-          <ShoppingCartOutlined key="" className="header-icon" />
+          <ShoppingCartOutlined lassName="header-icon" onClick={() => { this.onCartClick() }} />
           {user.isAdmin ?
             <Button type="primary" primary className="action-item">
               <Link to='/admin'>
@@ -139,13 +146,12 @@ class HeaderView extends Component {
               </Link></Button>
             : null
           }
-          {user.isAdmin && <IconFont
+          <IconFont
             type="iconlogout"
             className="action-item"
             onClick={this.logout}
           >
-            退出
-          </IconFont>}
+          </IconFont>
         </div>
         <div className="header-bottom">
           <div className="header-bottom-left">{title}</div>
@@ -155,7 +161,19 @@ class HeaderView extends Component {
             <span>{weather}</span>
           </div>
         </div>
+        <Drawer
+          title="Basic Drawer"
+          placement="right"
+          closable={false}
+          onClose={()=>{this.onDrawerClose()}}
+          visible={isDrawerVisible}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Drawer>
       </div >
+
     )
   }
 }
