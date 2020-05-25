@@ -12,7 +12,10 @@ import {
   RECEIVE_USER,
   SHOW_ERROR_MSG,
   RESET_USER,
-  BUY_CLOTH
+  LOAD_CART,
+  ADD_PRODUCT,
+  REMOVE_PRODUCT,
+  CHANGE_PRODUCT_QUANTITY
 } from './action-types'
 
 const initHeadTitle = ''
@@ -46,21 +49,35 @@ function user(state = initUser, action) {
   }
 }
 
-const initPurchasedCloth = [
-  {
-    clothId: "",
-    clothNum: 1
-  }
-]
 
-function purchasedCloth(state = initPurchasedCloth, action) {
+const initialState = {
+  products: []
+};
+
+function cart(state = initialState, action) {
   switch (action.type) {
-    case BUY_CLOTH:
-      console.log("=======action.clothId", action.clothId)
-      return action.clothId
-
+    case LOAD_CART:
+      return {
+        ...state,
+        products: action.payload
+      };
+    case ADD_PRODUCT:
+      return {
+        ...state,
+        productToAdd: Object.assign({}, action.payload)
+      };
+    case REMOVE_PRODUCT:
+      return {
+        ...state,
+        productToRemove: Object.assign({}, action.payload)
+      };
+    case CHANGE_PRODUCT_QUANTITY:
+      return {
+        ...state,
+        productToChange: Object.assign({}, action.payload)
+      };
     default:
-      return state
+      return state;
   }
 }
 
@@ -75,5 +92,5 @@ function purchasedCloth(state = initPurchasedCloth, action) {
 export default combineReducers({
   headTitle,
   user,
-  purchasedCloth
+  cart
 })

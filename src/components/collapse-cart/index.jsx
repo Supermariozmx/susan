@@ -4,12 +4,10 @@ import { connect } from 'react-redux';
 
 
 class ShoppingCart extends Component {
-    constructor(){
-        super(props);
-        const closePanel=this.props.onClose();
-        const showPanel=this.props.showDrawer();
-        const canView=this.props.visible;
-    }
+    // constructor(){
+    //     super(props);
+       
+    // }
   
     render() {
 

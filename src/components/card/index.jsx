@@ -5,7 +5,7 @@ import { PictureTwoTone, ShoppingCartOutlined } from '@ant-design/icons';
 import { reqVarietyProduct } from "../../api/index"
 import { BASE_IMG_URL } from '../../utils/constants'
 import "./index.less"
-import { buyCloth } from '../../redux/actions'
+import { addProduct } from '../../redux/actions'
 const { Meta } = Card;
 
 class ClothingCard extends Component {
@@ -40,11 +40,11 @@ class ClothingCard extends Component {
     showDetail = (item) => {
         console.log("-==========test if execute show detail", item)
         this.props.history.push({ pathname: `/main/detail/${item._id}`, state: { item } });
-        // this.props.history.push({""})
+       
     }
     buyCloth = (item) => {
-        const clothId = item._id;
-        this.props.buyCloth(clothId);
+        // const clothId = item._id;
+        this.props.addProduct(item);
 
     }
     render() {
@@ -99,6 +99,6 @@ class ClothingCard extends Component {
 // export default ClothingCard;
 
 export default connect(
-    state => ({ headTitle: state.headTitle, user: state.user }),
-    { buyCloth }
+    state => ({ headTitle: state.headTitle, user: state.user,cart:state.cart }),
+    { addProduct }
 )(ClothingCard)

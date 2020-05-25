@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter, Link } from 'react-router-dom'
 import { Modal, Button, Icon, Drawer } from 'antd'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 
 // import LinkButton from '../link-button'
@@ -20,6 +21,17 @@ const IconFont = Icon.createFromIconfontCN({
 左侧导航的组件
  */
 class HeaderView extends Component {
+  static propTypes = {
+    loadCart: PropTypes.func.isRequired,
+    updateCart: PropTypes.func.isRequired,
+    cartProducts: PropTypes.array.isRequired,
+    newProduct: PropTypes.object,
+    removeProduct: PropTypes.func,
+    productToRemove: PropTypes.object,
+    changeProductQuantity: PropTypes.func,
+    productToChange: PropTypes.object,
+  };
+
 
   state = {
     currentTime: formateDate(Date.now()), // 当前时间字符串
@@ -103,6 +115,8 @@ class HeaderView extends Component {
 
   onCartClick = () => {
     const { isDrawerVisible } = this.state;
+    const {cartProducts}=this.props;
+    console.log("========cartproducts",cartProducts);
     this.setState({ isDrawerVisible: !isDrawerVisible });
   };
   onDrawerClose = () => {
@@ -179,6 +193,6 @@ class HeaderView extends Component {
 }
 
 export default connect(
-  state => ({ headTitle: state.headTitle, user: state.user }),
+  state => ({ headTitle: state.headTitle, user: state.user,cart: state.cart}),
   { logout }
 )(withRouter(HeaderView))

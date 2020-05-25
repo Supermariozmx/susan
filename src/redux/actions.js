@@ -8,7 +8,10 @@ import {
   RECEIVE_USER,
   SHOW_ERROR_MSG,
   RESET_USER,
-  BUY_CLOTH
+  LOAD_CART,
+  ADD_PRODUCT,
+  REMOVE_PRODUCT,
+  CHANGE_PRODUCT_QUANTITY
 } from './action-types'
 import { reqLogin } from '../api'
 import storageUtils from "../utils/storageUtils";
@@ -62,4 +65,26 @@ export const login = (username, password) => {
 }
 
 
-export const buyCloth = (clothId) => ({ type: BUY_CLOTH, clothId })
+// export const buyCloth = (products) => 
+// ({ type: ADD_PRODUCT, payload: products })
+
+
+export const loadCart = products => ({
+  type: LOAD_CART,
+  payload: products
+});
+
+export const addProduct = product => ({
+  type: ADD_PRODUCT,
+  payload: product
+});
+
+export const removeProduct = product => ({
+  type: REMOVE_PRODUCT,
+  payload: product
+});
+
+export const changeProductQuantity = product => ({
+  type: CHANGE_PRODUCT_QUANTITY,
+  payload: product
+});
