@@ -130,7 +130,7 @@ class Main extends Component {
                         <Content style={{ margin: 20, backgroundColor: '#FFFFFF' }} className="main-content">
 
                             <Switch>
-                                <Redirect exact from='/main' to='main/discount' />
+                                <Redirect exact from='/main' to='main/map' />
                                 {/* <Route path='/main/discount' component={DiscountCarousel} /> */}
                                 <Route path='/main/culture' component={Culture} />
                                 <Route path='/main/map' component={ShopMap} />
