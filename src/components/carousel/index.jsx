@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import { Carousel } from 'antd';
 import "./index.less"
+import weijin from '../../assets/images/weijin.jpg';
 
-class DiscountCarousel extends Component {
+class CarouselView extends Component {
     render() {
         return (
             <>
-                <h1>test it </h1>
                 <Carousel autoplay>
                     <div>
-                        <h3>1</h3>
+                        <img className='autoplay-img' src={weijin} alt='test'></img>
                     </div>
                     <div>
                         <h3>2</h3>
@@ -26,4 +26,4 @@ class DiscountCarousel extends Component {
     }
 }
 
-export default DiscountCarousel
+export default CarouselView;

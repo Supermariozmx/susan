@@ -64,7 +64,8 @@ function cart(state = initialState, action) {
     case ADD_PRODUCT:
       return {
         ...state,
-        productToAdd: Object.assign({}, action.payload)
+        productToAdd: Object.assign({}, action.payload),
+        products:Object.assign({}, [].concat(action.payload))
       };
     case REMOVE_PRODUCT:
       return {

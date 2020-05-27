@@ -169,19 +169,14 @@ class HeaderView extends Component {
              >
              </IconFont>
           }
-          {user.isAdmin && 
-          // <Button type="primary" primary className="action-item">
-          //   <Link to='/register'>
-          //     <span>注册</span>
-          //   </Link>
-          // </Button>
+        
           <IconFont
             type="iconregister"
             className="action-item"
             onClick={()=>{this.props.history.push('/register')}}  
           >
           </IconFont>
-        }
+     
           <ShoppingCartOutlined className="action-item" onClick={() => { this.onCartClick() }} />
           {user.isAdmin ?
             // <Button type="primary" primary className="action-item">
