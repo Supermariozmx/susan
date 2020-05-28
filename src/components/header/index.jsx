@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { Modal, Icon, Drawer, Avatar } from 'antd'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
@@ -17,7 +17,7 @@ import { BASE_IMG_URL } from "../../utils/constants"
 
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1818861_ba1jknbhk1m.js',
-  
+
 });
 
 /*
@@ -118,26 +118,40 @@ class HeaderView extends Component {
 
   onCartClick = () => {
     const { isDrawerVisible } = this.state;
-    const { cartProducts } = this.props;
-    console.log("========cartproducts", cartProducts);
-    const productToAdd= this.props.cart.productToAdd;
-    console.log("99999999999999productToAdd",productToAdd)
+    const { products } = this.props.cart;
+    console.log("========cartproducts", products);
+    const productToAdd = this.props.cart.productToAdd;
+    console.log("99999999999999productToAdd", productToAdd)
     this.setState({ isDrawerVisible: !isDrawerVisible });
-    console.log("88888888888888cart",this.props.cart)
+    console.log("88888888888888cart", this.props.cart)
+    this.handleProducts(products);
   };
   onDrawerClose = () => {
     this.setState({ isDrawerVisible: false });
+  }
+  handleProducts = (products) => {
+    products.forEach((item) => {
+      products.forEach((citem) => {
+        if (item._id === citem._id) {
+          item.number = item.number + 1
+        } 
+      })
+    })
+    console.log("handled-=========products", products)
+    return products;
+
+  }
+  removeProduct = (item) => {
+    console.log("remove=======product", item)
   }
   render() {
 
     const { currentTime, dayPictureUrl, weather, isDrawerVisible } = this.state
 
     const username = this.props.user.username
-    const products = this.props.cart.cartProducts
-    
+    const products = this.props.cart.products;
 
 
-    // console.log("------user", this.props.user)
 
     // 得到当前需要显示的title
     // const title = this.getTitle()
@@ -151,7 +165,7 @@ class HeaderView extends Component {
           <IconFont
             type="iconhome"
             className="action-item"
-            onClick={()=>{this.props.history.push('/main')}}       
+            onClick={() => { this.props.history.push('/main') }}
           >
             {/* <Link to='/main'></Link> */}
           </IconFont>
@@ -162,21 +176,21 @@ class HeaderView extends Component {
             //     <span>登录</span>
             //   </Link>
             // </Button>
-               <IconFont
-               type="iconzhanghaodenglu"
-               className="action-item"  
-               onClick={()=>{this.props.history.push('/login')}}    
-             >
-             </IconFont>
+            <IconFont
+              type="iconzhanghaodenglu"
+              className="action-item"
+              onClick={() => { this.props.history.push('/login') }}
+            >
+            </IconFont>
           }
-        
+
           <IconFont
             type="iconregister"
             className="action-item"
-            onClick={()=>{this.props.history.push('/register')}}  
+            onClick={() => { this.props.history.push('/register') }}
           >
           </IconFont>
-     
+
           <ShoppingCartOutlined className="action-item" onClick={() => { this.onCartClick() }} />
           {user.isAdmin ?
             // <Button type="primary" primary className="action-item">
@@ -184,11 +198,11 @@ class HeaderView extends Component {
             //     <span>管理</span>
             //   </Link></Button>
             <IconFont
-            type="iconadmin"
-            className="action-item"
-            onClick={()=>{this.props.history.push('/admin')}} 
-          >
-          </IconFont>
+              type="iconadmin"
+              className="action-item"
+              onClick={() => { this.props.history.push('/admin') }}
+            >
+            </IconFont>
             : null
           }
           <IconFont
@@ -207,6 +221,7 @@ class HeaderView extends Component {
           </div>
         </div>
         <Drawer
+          className="cart-drawer"
           title="Basic Drawer"
           placement="right"
           closable={false}
@@ -214,9 +229,14 @@ class HeaderView extends Component {
           visible={isDrawerVisible}
         >
           {products ? <div className="cart-product" >
-            {products.forEach((item => {
-              return (<div>
-                <Avatar shape="square" size={32} src={BASE_IMG_URL + item.imgs[0]} />} />
+            {this.handleProducts(products).forEach((item => {
+              console.log("购物车内商品", item)
+              return (<div className='product-wrap'>
+                <span className='product-title'>{item.name}</span>
+                <div className='product-content'>
+                  <Avatar shape="square" size={32} src={BASE_IMG_URL + item.imgs[0]} />} />
+                  <IconFont type='icondelete' onClick={(item) => { this.removeProduct(item) }}></IconFont>
+                </div>
               </div>)
             }))}
 

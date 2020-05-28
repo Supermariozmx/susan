@@ -65,13 +65,25 @@ function cart(state = initialState, action) {
       return {
         ...state,
         productToAdd: Object.assign({}, action.payload),
-        products:Object.assign({}, [].concat(action.payload))
+        products: [...state.products].concat(action.payload)
       };
     case REMOVE_PRODUCT:
+      // const newItem =  state.products.map((item)=>{
+      //   if(item.id!==action.id){
+      //     return item
+      //   }
+      // })
+
+      // return {
+      //   ...state,
+      //   productToRemove: Object.assign({}, action.payload),
+      //   products: newItem
+      // };
       return {
         ...state,
-        productToRemove: Object.assign({}, action.payload)
-      };
+        products: handleRemoveProduct(state.products, action.id)
+      }
+
     case CHANGE_PRODUCT_QUANTITY:
       return {
         ...state,
@@ -80,6 +92,16 @@ function cart(state = initialState, action) {
     default:
       return state;
   }
+}
+
+
+function handleRemoveProduct(products, id) {
+  const newItem = products.map((item) => {
+    if (item.id !== id) {
+      return item;
+    } else return null;
+  })
+  return newItem;
 }
 
 /*
