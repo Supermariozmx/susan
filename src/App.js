@@ -6,6 +6,7 @@ import Admin from './pages/admin/admin'
 import Main from "./pages/main/main"
 // import ClothingCard from './components/card'
 import Register from './pages/register/register'
+// import NotFound from './pages/not-found/not-found'
 // import Culture from "./pages/culture/culture"
 /*
 应用的根组件

@@ -13,8 +13,8 @@ class ShopMap extends Component {
 
             handleSearch(data)
         }
-        var onError = function () {
-            console.log("-----error")
+        var onError = function (data) {
+            console.log("-----error ----data",data)
             message.error('定位出错，请开启定位服务')
         }
 
@@ -25,6 +25,7 @@ class ShopMap extends Component {
 
         var handleSearch=function(data){
             const pos=data.position
+            console.log("qqqqqqqqqqqqqqqqqqqqqq  search data",data);
             if (data.info === "SUCCESS" && data.type === 'complete') {
                 message.success('成功定位您的位置,已为你显示附近门店')
                 window.AMap.service(["AMap.PlaceSearch"], function() {

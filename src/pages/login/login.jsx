@@ -1,16 +1,16 @@
-import React, {Component} from 'react'
-import {Redirect} from 'react-router-dom'
+import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 import {
   Form,
   Icon,
   Input,
   Button,
 } from 'antd'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 import './login.less'
 import logo from '../../assets/images/logo.png'
-import {login} from '../../redux/actions'
+import { login } from '../../redux/actions'
 
 const Item = Form.Item // 不能写在import之前
 
@@ -30,7 +30,7 @@ class Login extends Component {
       if (!err) {
         // console.log('提交登陆的ajax请求', values)
         // 请求登陆
-        const {username, password} = values
+        const { username, password } = values
 
         // 调用分发异步action的函数 => 发登陆的异步请求, 有了结果后更新状态
         this.props.login(username, password)
@@ -59,11 +59,11 @@ class Login extends Component {
     */
   validatePwd = (rule, value, callback) => {
     console.log('validatePwd()', rule, value)
-    if(!value) {
+    if (!value) {
       callback('密码必须输入')
-    } else if (value.length<4) {
+    } else if (value.length < 4) {
       callback('密码长度不能小于4位')
-    } else if (value.length>12) {
+    } else if (value.length > 12) {
       callback('密码长度不能大于12位')
     } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
       callback('密码必须是英文、数字或下划线组成')
@@ -73,12 +73,12 @@ class Login extends Component {
     // callback('xxxx') // 验证失败, 并指定提示的文本
   }
 
-  render () {
+  render() {
 
     // 如果用户已经登陆, 自动跳转到管理界面
     const user = this.props.user
-    if(user && user._id) {
-      return <Redirect to='/'/>
+    if (user && user._id) {
+      return <Redirect to='/' />
     }
 
     // 得到具强大功能的form对象
@@ -88,7 +88,7 @@ class Login extends Component {
     return (
       <div className="login">
         <header className="login-header">
-          <img src={logo} alt="logo"/>
+          <img src={logo} alt="logo" />
           <h1>欢迎来到Only For You-</h1>
         </header>
         <section className="login-content">
@@ -146,8 +146,20 @@ class Login extends Component {
                 登陆
               </Button>
             </Form.Item>
+            <div className="login-footer-link">
+              <p className="login-back-home"
+                onClick={() => { this.props.history.push('./main') }}>
+                回到首页
+                        </p>
+              <p className="login-back-register"
+                onClick={() => { this.props.history.push('./register') }}>
+                注册一个？
+                        </p>
+            </div>
           </Form>
+
         </section>
+
       </div>
     )
   }
@@ -178,8 +190,8 @@ class Login extends Component {
  */
 const WrapLogin = Form.create()(Login)
 export default connect(
-  state => ({user: state.user}),
-  {login}
+  state => ({ user: state.user }),
+  { login }
 )(WrapLogin)
 
 

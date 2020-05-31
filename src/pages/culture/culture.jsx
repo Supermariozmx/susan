@@ -1,36 +1,92 @@
 import React, { Component } from 'react';
-import "./test.less";
+import "./culture.less";
 import CarouselView from '../../components/carousel';
-import qin from '../../assets/images/qinhan.jpg';
 import han from '../../assets/images/han.jpg';
 import weijin from '../../assets/images/weijin.jpg';
+
+import { reqVarietyProduct } from "../../api/index"
+import { BASE_IMG_URL } from '../../utils/constants'
 /*
 应用的根组件
  */
 class Culture extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            renderCultureData: []
+        }
+    }
+
+    componentDidMount() {
+        this.handleVarifyProduct()
+    }
+    componentWillReceiveProps() {
+        this.handleVarifyProduct()
+    }
+    handleVarifyProduct = async () => {
+        const pathName = this.props.location.pathname
+        const categoryIdArray = pathName.split("/")
+        const categoryId = categoryIdArray[3];
+        const result = await reqVarietyProduct(categoryId)
+        if (result.status === 0) {
+            // console.log("--------------------test anne result", result.data)
+            // this.data = result;
+            this.setState({ renderCultureData: result.data })
+            console.log("==================culture", this.state.renderCultureData)
+        } else {
+            console.log("------------error")
+        }
+
+    }
 
     render() {
+        const { renderCultureData } = this.state;
         return (
             <div className="culture-content">
-                <h1> 服装文化</h1>
-                {/* <p>中国素享“衣冠王国”之美誉，服饰既是民族文化的重要组成部分，又是历史发展和社会时尚嬗替的标志之一。
-              古人云“衣食住行”，衣为先。在中国人眼中，穿衣是一件大事，穿衣是身份地位的象征。
-            在中国传统上，服装还是政治的一部分，其重要性，远超出服装在现代社会的地位。</p> */}
                 <CarouselView></CarouselView>
-                <div className="culture-block">
-                    <div className="culture-des culture-item">
-                        <h3>先秦服饰</h3>
-                        <p> 先秦时期</p>
-                        <p> 妇女不穿裤子穿裙子</p>
-                        <p> 人们常说的衣裳</p>
-                        <p> 指的是衣服和裙子</p>
-                        <p> 上为衣，下为裳</p>
-                    </div>
-                    <div className='culture-img culture-item'>
-                        <img src={qin} alt='qin'>
-                        </img></div>
-                </div>
+                {renderCultureData ?
+                    renderCultureData.map((item, index) => {
+                        if (index % 2 === 0) {
+                            return (
+
+                                <div className="culture-block">
+                                    <div className="culture-des culture-item">
+                                        <div  className='culture-product-detail'
+                                        dangerouslySetInnerHTML={{ __html: item.detail }}>
+                                        </div>
+                                    </div>
+                                    <div className='culture-img culture-item'>
+                                        < img
+                                            alt="example"
+                                            src={BASE_IMG_URL + item.imgs[0]}
+                                        />
+                                    </div>
+                                </div>
+                            )
+
+                        } else {
+                            return (
+                                <div className="culture-block">
+                                    <div className='culture-img culture-item'>
+                                        <img src={han} alt='han'>
+                                        </img>
+                                    </div>
+                                    <div className="culture-des culture-item">
+                                        <h3>汉朝服饰</h3>
+                                        <p> 最有名的是留仙裙</p>
+                                        <p> 汉朝女人每层衣服的领子必须露出</p>
+                                        <p> 层层叠叠可以超过3层</p>
+                                        <p> 名曰三重衣</p>
+                                        <p> 宽大的衣袖也许不太方便</p>
+                                        <p> 但显得端庄大气</p>
+                                    </div>
+                                </div>
+                            )
+                        }
+                    })
+
+                    : null}
                 <div className="culture-block">
 
                     <div className='culture-img culture-item'>

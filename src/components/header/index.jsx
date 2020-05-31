@@ -10,7 +10,7 @@ import { reqWeather } from '../../api'
 import menuList from '../../config/menuConfig'
 import { formateDate } from '../../utils/dateUtils'
 import './index.less'
-import { logout } from '../../redux/actions'
+import { logout,removeProduct } from '../../redux/actions'
 
 
 import { BASE_IMG_URL } from "../../utils/constants"
@@ -142,6 +142,8 @@ class HeaderView extends Component {
 
   }
   removeProduct = (item) => {
+    const {removeProduct}=this.props;
+    removeProduct(item);
     console.log("remove=======product", item)
   }
   render() {
@@ -156,7 +158,7 @@ class HeaderView extends Component {
     // 得到当前需要显示的title
     // const title = this.getTitle()
     const title = this.props.headTitle
-    const { user } = this.props
+    const { user } = this.props;
     return (
       <div className="header">
         <div className="header-top">
@@ -191,7 +193,6 @@ class HeaderView extends Component {
           >
           </IconFont>
 
-          <ShoppingCartOutlined className="action-item" onClick={() => { this.onCartClick() }} />
           {user.isAdmin ?
             // <Button type="primary" primary className="action-item">
             //   <Link to='/admin'>
@@ -211,6 +212,8 @@ class HeaderView extends Component {
             onClick={this.logout}
           >
           </IconFont>
+          
+          <ShoppingCartOutlined className="action-item" onClick={() => { this.onCartClick() }} />
         </div>
         <div className="header-bottom">
           <div className="header-bottom-left">{title}</div>
@@ -229,20 +232,22 @@ class HeaderView extends Component {
           visible={isDrawerVisible}
         >
           {products ? <div className="cart-product" >
-            {this.handleProducts(products).forEach((item => {
+            {this.handleProducts(products).map((item ,index)=> {
               console.log("购物车内商品", item)
-              return (<div className='product-wrap'>
+              return (<div className='product-wrap' key={index}>
                 <span className='product-title'>{item.name}</span>
                 <div className='product-content'>
-                  <Avatar shape="square" size={32} src={BASE_IMG_URL + item.imgs[0]} />} />
+                  <Avatar shape="square" size={32} src={BASE_IMG_URL + item.imgs[0]} />
                   <IconFont type='icondelete' onClick={(item) => { this.removeProduct(item) }}></IconFont>
                 </div>
               </div>)
-            }))}
+            })}
 
           </div> : null}
+
           <p>Some contents...</p>
           <p>Some contents...</p>
+     
         </Drawer>
       </div >
 
@@ -252,5 +257,5 @@ class HeaderView extends Component {
 
 export default connect(
   state => ({ headTitle: state.headTitle, user: state.user, cart: state.cart }),
-  { logout }
+  { logout ,removeProduct}
 )(withRouter(HeaderView))
