@@ -52,7 +52,7 @@ class Admin extends Component {
               <Route component={NotFound} /> {/*上面没有一个匹配, 直接显示*/}
             </Switch>
           </Content>
-          <Footer style={{ textAlign: 'center', color: '#cccccc' }}>推荐使用谷歌浏览器，可以获得更佳页面操作体验</Footer>
+          <Footer style={{ textAlign: 'center', color: '#cccccc' }}>Mengxue.Zhang graduation project 2020</Footer>
         </Layout>
       </Layout>
     )

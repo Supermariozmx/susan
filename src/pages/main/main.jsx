@@ -14,6 +14,8 @@ import "./main.less"
 import "../../components/left-nav/index.less"
 import ClothingDetail from "../detail/detail"
 import NotFound from '../not-found/not-found'
+import PayMent from '../payment/payment';
+
 
 // const { Search } = Input;
 const { Content, Sider, Footer } = Layout;
@@ -141,6 +143,7 @@ class Main extends Component {
                                 <Route path='/main/woman/pants/5ebb8db739d9ef548870e465' component={ClothingCard} />
                                 <Route path='/main/woman/dress/5eb7b9bbf70c283f343efc20' component={ClothingCard} />
                                 <Route key="detail" path="/main/detail/:id" component={ClothingDetail} />,
+                                <Route key="detail" path="/main/payment" component={PayMent} />,
                                 <Route component={NotFound} />
                             </Switch>
                         </Content>

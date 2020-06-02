@@ -5,11 +5,12 @@
         height: 300px;
         width: 100%;
         display: flex;
-        background-color: #FFFFBB;
+        margin-left: 2%;
 
         .culture-product-detail {
             margin-left: 24px;
             margin-top: 10px;
+
 
             p {
                 font-size: 13px;
@@ -23,29 +24,84 @@
             }
         }
 
+
         .culture-item {
-            width: 45%;
-            margin-left: 5%;
-        }
-
-        .culture-des {
-            background-color: pink;
-
+            margin-left: 3%;
+            width: 44%;
         }
 
         .culture-img {
-            background-color: darkorchid;
-            // width: 45%;
+            background-color: #F5FFFA;
+            // width: 50%;
+            display: flex;
         }
 
         .culture-img>img {
             height: 300px;
             width: 300px;
         }
+
+        .culture-des {
+            background-color: #F5FFFA;
+            // width: 40%;
+            // margin-right: 5%;
+
+            .culture-more {
+                float: right;
+                margin-right: 50px;
+                width: 100px;
+                background: #FAF0E6;
+            }
+        }
+
+
     }
 
     .culture-img {
         width: 300px;
         height: 300px;
+    }
+
+    .culture-product-content {
+        margin-left: 24px;
+        margin-top: 40px;
+
+        .culture-product-name {
+            font-size: 18px;
+            color: #444444;
+            font-weight: 600;
+        }
+
+        .culture-product-price {
+            font-size: 14px;
+            color: #AAAAAA;
+        }
+
+        .culture-product-des {
+            font-size: 14px;
+            color: #AAAAAA;
+        }
+
+        .culture-product-action {
+            display: flex;
+
+            .action-item {
+                font-size: 16px;
+                margin-right: 16px;
+                color: #444444;
+            }
+
+            .action-button {
+                margin-right: 8px;
+            }
+
+            .view-button {
+                background: #FAF0E6;
+            }
+
+            // .buy-button {
+            //     background: #FFFACD;
+            // }
+        }
     }
 }

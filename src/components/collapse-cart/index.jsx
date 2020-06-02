@@ -13,7 +13,7 @@ class ShoppingCart extends Component {
 
         return (
             <div className="collapse-cart">
-                <Drawer
+                {/* <Drawer
                     title="Basic Drawer"
                     placement="right"
                     closable={false}
@@ -23,7 +23,7 @@ class ShoppingCart extends Component {
                     <p>Some contents...</p>
                     <p>Some contents...</p>
                     <p>Some contents...</p>
-                </Drawer>
+                </Drawer> */}
             </div >
         )
     }
