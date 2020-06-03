@@ -79,6 +79,8 @@ export const reqUsers = () => ajax(BASE + '/manage/user/list')
 export const reqDeleteUser = (userId) => ajax(BASE + '/manage/user/delete', {userId}, 'POST')
 // 添加/更新用户
 export const reqAddOrUpdateUser = (user) => ajax(BASE + '/manage/user/'+(user._id ? 'update' : 'add'), user, 'POST')
+//获取指定用户
+export const reqOneUser=(userId)=>ajax(BASE + '/personal/user', {userId})
 
 /*
 json请求的接口请求函数

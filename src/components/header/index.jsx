@@ -149,6 +149,47 @@ class HeaderView extends Component {
     removeProduct(item);
     console.log("remove=======product", item)
   }
+  handledMenu = () => {
+    const { user } = this.props;
+    return (
+      <Menu onClick={() => { }}>
+        <Menu.Item key="1" icon={<UserOutlined />}>
+
+          <IconFont
+            type="iconregister"
+            className="action-item"
+            onClick={()=>{this.props.history.push("./register")}}
+          />
+          注册
+      </Menu.Item>
+        {(!user || !user._id) && <Menu.Item key="2">
+          <IconFont
+            type="iconzhanghaodenglu"
+            className="action-item"
+            onClick={()=>{this.props.history.replace("./login")}}
+          />
+          登录
+      </Menu.Item>}
+        {user && user._id && <Menu.Item key="3">
+          <IconFont
+            type="iconlogout"
+            className="action-item"
+            onClick={this.logout}
+          />
+          退出
+      </Menu.Item>}
+        {user.isAdmin && <Menu.Item key="4">
+          <IconFont
+            type="iconadmin"
+            className="action-item"
+            onClick={() => { this.props.history.push('/admin') }}
+          />
+          管理
+      </Menu.Item>
+        }
+      </Menu>
+    );
+  }
   render() {
 
     const { currentTime, dayPictureUrl, weather, isDrawerVisible } = this.state
@@ -156,50 +197,55 @@ class HeaderView extends Component {
     const username = this.props.user.username
     const products = this.props.cart.products;
 
-    const menu = (
-      <Menu onClick={() => { }}>
-        <Menu.Item key="1" icon={<UserOutlined />}>
+    // const menu =
+    //   (
+    //     <Menu onClick={() => { }}>
+    //       <Menu.Item key="1" icon={<UserOutlined />}>
 
-          <IconFont
-            type="iconregister"
-            className="action-item"
-          />
-          注册
-        </Menu.Item>
-        {/* <Menu.Item key="2" icon={<UserOutlined />}>
-          <IconFont
-            type="iconzhanghaodenglu"
-            className="action-item"
-          />
-          登录
-        </Menu.Item> */}
-        <Menu.Item key="3" icon={<UserOutlined />}>
-          <IconFont
-            type="iconlogout"
-            className="action-item"
-          />
-          退出
-        </Menu.Item>
-        <Menu.Item key="3" icon={<UserOutlined />}>
-          <IconFont
-            type="iconadmin"
-            className="action-item"
-          />
-          管理
-        </Menu.Item>
-      </Menu>
-    );
+    //         <IconFont
+    //           type="iconregister"
+    //           className="action-item"
+    //         />
+    //         注册
+    //     </Menu.Item>
+    //       {/* <Menu.Item key="2" icon={<UserOutlined />}>
+    //       <IconFont
+    //         type="iconzhanghaodenglu"
+    //         className="action-item"
+    //       />
+    //       登录
+    //     </Menu.Item> */}
+    //       <Menu.Item key="3" icon={<UserOutlined />}>
+    //         <IconFont
+    //           type="iconlogout"
+    //           className="action-item"
+
+    //         />
+    //         退出
+    //     </Menu.Item>
+    //       <Menu.Item key="3" icon={<UserOutlined />}>
+    //         <IconFont
+    //           type="iconadmin"
+    //           className="action-item"
+    //           onClick={() => { this.props.history.push('/admin') }}
+    //         />
+    //         管理
+    //     </Menu.Item>
+
+    //     </Menu>
+    //   );
+
 
     // 得到当前需要显示的title
     // const title = this.getTitle()
     const title = this.props.headTitle
     // const { user } = this.props;
     return (
-      <div className="header">
+      <div className="header" >
         <div className="header-top">
           <div className="header-action-bar">
             <span>欢迎来到Only for You - {username}</span>
-            <Dropdown overlay={menu} className="quick-dropdown header-action">
+            <Dropdown overlay={this.handledMenu} className="quick-dropdown header-action">
               <Button>
                 <IconFont type="iconquick" /><DownOutlined />
               </Button>
@@ -216,7 +262,7 @@ class HeaderView extends Component {
               className="action-item header-action"
               onClick={() => { this.props.history.push('/advice') }}
             >
-            </IconFont>     
+            </IconFont>
             {/* {(!user || !user._id) &&
 
             <IconFont
