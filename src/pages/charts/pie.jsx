@@ -10,7 +10,7 @@ export default class Pie extends Component {
   getOption = () => {
     return {
       title : {
-        text: '某站点用户访问来源',
+        text: '本用户访问来源',
         subtext: '纯属虚构',
         x:'center'
       },

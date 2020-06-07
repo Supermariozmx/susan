@@ -133,15 +133,30 @@ class HeaderView extends Component {
     this.setState({ isDrawerVisible: false });
   }
   handleProducts = (products) => {
-    products.forEach((item) => {
-      products.forEach((citem) => {
-        if (item._id === citem._id) {
-          item.number = item.number + 1
+    console.log("test handle products execute")
+    for (let i = 0; i < products.length; i++) {
+      // eslint-disable-next-line no-lone-blocks
+      {
+        for (let j = i + 1; j < products.length; j++) {
+          if (products[i].id === products[j].id) {
+            products[i].number++;
+            products.splice(j, 1);
+          }
         }
-      })
-    })
-    console.log("handled-=========products", products)
+
+      }
+    }
+    console.log("handled products======", products)
     return products;
+    // products.forEach((item) => {
+    //   products.forEach((citem) => {
+    //     if (item._id === citem._id) {
+    //       item.number = item.number + 1
+    //     }
+    //   })
+    // })
+    // console.log("handled-=========products", products)
+    // return products;
 
   }
   removeProduct = (item) => {
@@ -158,7 +173,7 @@ class HeaderView extends Component {
           <IconFont
             type="iconregister"
             className="action-item"
-            onClick={()=>{this.props.history.push("./register")}}
+            onClick={() => { this.props.history.push("./register") }}
           />
           注册
       </Menu.Item>
@@ -166,7 +181,7 @@ class HeaderView extends Component {
           <IconFont
             type="iconzhanghaodenglu"
             className="action-item"
-            onClick={()=>{this.props.history.replace("./login")}}
+            onClick={() => { this.props.history.replace("./login") }}
           />
           登录
       </Menu.Item>}
@@ -296,7 +311,7 @@ class HeaderView extends Component {
           >
           </IconFont> */}
             <ShoppingCartOutlined className="action-item header-action" onClick={() => { this.onCartClick() }} />
-            <Avatar shape="square" className="header-action" size={32} src={personal} />
+            <Avatar shape="square" className="header-action" size={32} src={personal} onClick={() => { this.props.history.push("/main/personal") }} />
           </div>
         </div>
         <div className="header-bottom">
@@ -317,7 +332,7 @@ class HeaderView extends Component {
         >
           {products ? <div className="cart-product" >
             {this.handleProducts(products).map((item, index) => {
-              console.log("购物车内商品", item)
+              // console.log("购物车内商品", item)
               return (<div className='product-wrap' key={index}>
                 <span className='product-title'>{item.name}</span>
                 <div className='product-content'>

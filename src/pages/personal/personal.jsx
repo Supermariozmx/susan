@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, List, Icon } from 'antd'
+import { Card, List, Icon, Switch, Form } from 'antd'
 import { withRouter } from 'react-router-dom'
 // import { BASE_IMG_URL } from "../../utils/constants"
 import { reqOneUser } from "../../api/index";
@@ -10,7 +10,8 @@ class PersonalCenter extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            renderData: {}
+            renderData: {},
+            isSwitchOn: true
         }
     }
 
@@ -33,10 +34,11 @@ class PersonalCenter extends Component {
         } else {
             console.log("please login")
         }
-
-
     }
 
+    handleSwitchChange = () => {
+
+    }
     render() {
         const { renderData } = this.state
         const title = (
@@ -49,22 +51,28 @@ class PersonalCenter extends Component {
                 <span>个人中心</span>
             </span>
         )
+        const formItemLayout = {
+            labelCol: { span: 2 },  // 左侧label的宽度
+            wrapperCol: { span: 8 }, // 右侧包裹的宽度
+        }
+
         return (
 
             <div className="clothing-detail">
                 <Card className='product-detail' title={title}>
-                    <List>
+                    <Form {...formItemLayout}>
+
                         <Item>
-                            <span className="left">用户名:</span>
+                            <span className="left">用户名</span>
                             <span>{renderData.username}</span>
                         </Item>
                         <Item>
                             <span className="left">电话</span>
-                            <span>{renderData.phone?renderData.phone:"您没有输入"}</span>
+                            <span>{renderData.phone ? renderData.phone : ""}</span>
                         </Item>
                         <Item>
                             <span className="left">地址</span>
-                            {/* <span>{itemValue.price}</span> */}
+                            <span>{renderData.address ? renderData.address : ""}</span>
                         </Item>
                         <Item>
                             <span className="left">邮箱</span>
@@ -81,13 +89,12 @@ class PersonalCenter extends Component {
                                 }
                             </span> */}
                         </Item>
-                        {/* <Item>
-                            <span className="left">商品详情:</span>
-                            <span dangerouslySetInnerHTML={{ __html: itemValue.detail }}>
-                            </span>
-                        </Item> */}
+                        <Item>
+                            <Switch defaultChecked onChange={() => { this.handleSwitchChange() }} />,
+                        </Item>onSwitchChange
 
-                    </List>
+
+                    </Form>
                 </Card>
             </div>
         )
