@@ -11,7 +11,8 @@ import {
   LOAD_CART,
   ADD_PRODUCT,
   REMOVE_PRODUCT,
-  CHANGE_PRODUCT_QUANTITY
+  CHANGE_PRODUCT_QUANTITY,
+  CLEAR_CART
 } from './action-types'
 import { reqLogin } from '../api'
 import storageUtils from "../utils/storageUtils";
@@ -51,6 +52,7 @@ export const login = (username, password) => {
     // 2.1. 如果成功, 分发成功的同步action
     if (result.status === 0) {
       const user = result.data
+      console.log("=================login result", result)
       // 保存local中
       storageUtils.saveUser(user)
       // 分发接收用户的同步action
@@ -74,10 +76,14 @@ export const loadCart = products => ({
   payload: products
 });
 
-export const addProduct = product => ({
-  type: ADD_PRODUCT,
-  payload: product
-});
+export const addProduct = product => {
+  return ({
+    type: ADD_PRODUCT,
+    payload: product
+  });
+}
+
+
 
 export const removeProduct = product => ({
   type: REMOVE_PRODUCT,
@@ -88,3 +94,8 @@ export const changeProductQuantity = product => ({
   type: CHANGE_PRODUCT_QUANTITY,
   payload: product
 });
+
+export const clearCart = product => ({
+  type: CLEAR_CART,
+  payload: product
+})

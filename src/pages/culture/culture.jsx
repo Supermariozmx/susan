@@ -4,6 +4,8 @@ import CarouselView from '../../components/carousel';
 import { reqVarietyProduct } from "../../api/index"
 import { BASE_IMG_URL } from '../../utils/constants'
 import { Button } from 'antd'
+import { connect } from 'react-redux'
+import { addProduct } from '../../redux/actions'
 // import { PictureTwoTone, ShoppingCartOutlined } from '@ant-design/icons';
 /*
 应用的根组件
@@ -39,6 +41,17 @@ class Culture extends Component {
 
     }
 
+    buyCloth = (item) => {
+        // const clothId = item._id;
+        this.props.addProduct(item);
+
+    }
+    goMore = () => {
+        window.location.href = "http://www.ef360.com/"
+    }
+    showDetail = (item) => {
+        this.props.history.push({ pathname: `/main/detail/${item._id}`, state: { item } });
+    }
     render() {
         const { renderCultureData } = this.state;
         return (
@@ -54,7 +67,7 @@ class Culture extends Component {
                                         <div className='culture-product-detail'
                                             dangerouslySetInnerHTML={{ __html: item.detail }}>
                                         </div>
-                                        <Button type="dashed" className='culture-more' block>
+                                        <Button type="dashed" className='culture-more' onClick={() => { this.goMore() }}>
                                             查看更多
                                        </Button>
                                     </div>
@@ -74,11 +87,11 @@ class Culture extends Component {
                                                 {item.desc}
                                             </p>
                                             <div className="culture-product-action">
-                                                <Button type="dashed" className='action-button view-button' >
+                                                <Button type="dashed" className='action-button view-button' onClick={() => { this.showDetail(item) }}>
                                                     查看
                                              </Button>
-                                                <Button type="dashed" className='action-button buy-button' >
-                                                    购买
+                                                <Button type="dashed" className='action-button buy-button' onClick={() => { this.buyCloth(item) }} >
+                                                    加购
                                              </Button>
                                             </div>
                                         </div>
@@ -107,11 +120,11 @@ class Culture extends Component {
                                             <div className="culture-product-action">
                                                 {/* <PictureTwoTone className="action-item" onClick={() => { }} />,
                                             <ShoppingCartOutlined key="" className="action-item" onClick={() => { }} /> */}
-                                                <Button type="dashed" className='action-button view-button' >
+                                                <Button type="dashed" className='action-button view-button' onClick={() => { this.showDetail(item) }}>
                                                     查看
                                              </Button>
-                                                <Button type="dashed" className='action-button buy-button' >
-                                                    购买
+                                                <Button type="dashed" className='action-button buy-button' onClick={() => { this.buyCloth(item) }}>
+                                                    加购
                                              </Button>
                                             </div>
                                         </div>
@@ -120,7 +133,7 @@ class Culture extends Component {
                                         <div className='culture-product-detail'
                                             dangerouslySetInnerHTML={{ __html: item.detail }}>
                                         </div>
-                                        <Button type="dashed" className='culture-more'>
+                                        <Button type="dashed" className='culture-more' onClick={() => { this.goMore() }}>
                                             查看更多
                                        </Button>
                                     </div>
@@ -137,4 +150,8 @@ class Culture extends Component {
     }
 }
 
-export default Culture
+
+export default connect(
+    state => ({ headTitle: state.headTitle, user: state.user, cart: state.cart }),
+    { addProduct }
+)(Culture)

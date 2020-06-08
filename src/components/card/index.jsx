@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Spin } from 'antd';
+import { Card, Spin, message } from 'antd';
 import { connect } from 'react-redux'
 import { PictureTwoTone, ShoppingCartOutlined } from '@ant-design/icons';
 import { reqVarietyProduct } from "../../api/index"
@@ -38,13 +38,17 @@ class ClothingCard extends Component {
 
     }
     showDetail = (item) => {
-        console.log("-==========test if execute show detail", item)
         this.props.history.push({ pathname: `/main/detail/${item._id}`, state: { item } });
-       
     }
     buyCloth = (item) => {
         // const clothId = item._id;
-        this.props.addProduct(item);
+        const { user } = this.props;
+        if (user && user._id) {
+            this.props.addProduct(item);
+        }else{
+            message.error("无法加购，请先登录")
+        }
+
 
     }
     render() {
@@ -99,6 +103,6 @@ class ClothingCard extends Component {
 // export default ClothingCard;
 
 export default connect(
-    state => ({ headTitle: state.headTitle, user: state.user,cart:state.cart }),
+    state => ({ headTitle: state.headTitle, user: state.user, cart: state.cart }),
     { addProduct }
 )(ClothingCard)

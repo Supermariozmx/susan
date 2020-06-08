@@ -63,7 +63,7 @@ export default class ProductDetail extends Component {
   render() {
 
     // 读取携带过来的state数据
-    const { name, desc, price, detail, imgs } = memoryUtils.product
+    const { name, desc, price, detail, imgs, quantity } = memoryUtils.product
     const { cName1, cName2 } = this.state
 
     const title = (
@@ -93,6 +93,10 @@ export default class ProductDetail extends Component {
           <Item>
             <span className="left">商品价格:</span>
             <span>{price}元</span>
+          </Item>
+          <Item>
+            <span className="left">商品数量:</span>
+            <span>{quantity}</span>
           </Item>
           <Item>
             <span className="left">所属分类:</span>

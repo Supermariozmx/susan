@@ -4,7 +4,6 @@ import {
   Card,
   Statistic,
   DatePicker,
-  Timeline
 } from 'antd'
 import moment from 'moment'
 
@@ -77,22 +76,6 @@ export default class Home extends Component {
             extra={<Icon type="reload"/>}
           >
             <Bar/>
-          </Card>
-
-          <Card title='任务' extra={<Icon type="reload"/>} className="home-table-right">
-            <Timeline>
-              <Timeline.Item color="green">新版本迭代会</Timeline.Item>
-              <Timeline.Item color="green">完成网站设计初版</Timeline.Item>
-              <Timeline.Item color="red">
-                <p>联调接口</p>
-                <p>功能验收</p>
-              </Timeline.Item>
-              <Timeline.Item>
-                <p>登录功能设计</p>
-                <p>权限验证</p>
-                <p>页面排版</p>
-              </Timeline.Item>
-            </Timeline>
           </Card>
         </Card>
       </div>

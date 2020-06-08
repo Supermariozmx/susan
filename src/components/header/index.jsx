@@ -1,25 +1,37 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { Modal, Icon, Drawer, Avatar, Button, InputNumber, Dropdown, Menu, Checkbox } from 'antd'
+import { Modal, Icon, Drawer, Avatar, Button, Dropdown, Menu, Popconfirm, Table, InputNumber } from 'antd'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { ShoppingCartOutlined, DownOutlined, UserOutlined } from '@ant-design/icons';
 import personal from '../../assets/images/personal.jpg';
-
+import { BASE_IMG_URL } from '../../utils/constants'
 // import LinkButton from '../link-button'
 import { reqWeather } from '../../api'
 import menuList from '../../config/menuConfig'
 import { formateDate } from '../../utils/dateUtils'
 import './index.less'
-import { logout, removeProduct } from '../../redux/actions'
+import { logout, removeProduct, clearCart } from '../../redux/actions'
 
-
-import { BASE_IMG_URL } from "../../utils/constants"
 
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1818861_hn2luc3ef7q.js',
 
 });
+
+
+// const mockdata = [{
+//   categoryId: "5eb7b9bbf70c283f343efc20",
+//   desc: "你就是最美的仙女",
+//   detail: "<p></p>↵",
+//   imgs: ["image-1590812451282.jpg"],
+//   name: "最美连衣裙",
+//   pCategoryId: "5eb7b987f70c283f343efc1d",
+//   price: 188,
+//   quantity: 9,
+//   status: 1,
+//   _id: "5eb7b968f70c283f343efc1c"
+// }]
 
 /*
 左侧导航的组件
@@ -43,16 +55,17 @@ class HeaderView extends Component {
     dayPictureUrl: '', // 天气图片url
     weather: '', // 天气的文本
     isDrawerVisible: false,
-    checked: false
+    checked: false,
+    isPopupDisabled: true
   }
 
-  getTime = () => {
-    // 每隔1s获取当前时间, 并更新状态数据currentTime
-    this.intervalId = setInterval(() => {
-      const currentTime = formateDate(Date.now())
-      this.setState({ currentTime })
-    }, 1000)
-  }
+  // getTime = () => {
+  //   // 每隔1s获取当前时间, 并更新状态数据currentTime
+  //   this.intervalId = setInterval(() => {
+  //     const currentTime = formateDate(Date.now())
+  //     this.setState({ currentTime })
+  //   }, 1000)
+  // }
 
   getWeather = async () => {
     // 调用接口请求异步获取数据
@@ -94,22 +107,21 @@ class HeaderView extends Component {
       }
     })
   }
-
   /*
   第一次render()之后执行一次
   一般在此执行异步操作: 发ajax请求/启动定时器
    */
   componentDidMount() {
     // 获取当前的时间
-    this.getTime()
+    // this.getTime()
     // 获取当前天气
     this.getWeather()
   }
-  /*
-  // 不能这么做: 不会更新显示
-  componentWillMount () {
-    this.title = this.getTitle()
-  }*/
+
+  componentWillMount() {
+    this.initColumns()
+  }
+
 
   /*
   当前组件卸载之前调用
@@ -119,6 +131,7 @@ class HeaderView extends Component {
     clearInterval(this.intervalId)
   }
 
+
   onCartClick = () => {
     const { isDrawerVisible } = this.state;
     const { products } = this.props.cart;
@@ -127,42 +140,20 @@ class HeaderView extends Component {
     console.log("99999999999999productToAdd", productToAdd)
     this.setState({ isDrawerVisible: !isDrawerVisible });
     console.log("88888888888888cart", this.props.cart)
-    this.handleProducts(products);
+    // this.handleProducts(products);
   };
   onDrawerClose = () => {
     this.setState({ isDrawerVisible: false });
   }
-  handleProducts = (products) => {
-    console.log("test handle products execute")
-    for (let i = 0; i < products.length; i++) {
-      // eslint-disable-next-line no-lone-blocks
-      {
-        for (let j = i + 1; j < products.length; j++) {
-          if (products[i].id === products[j].id) {
-            products[i].number++;
-            products.splice(j, 1);
-          }
-        }
 
-      }
-    }
-    console.log("handled products======", products)
-    return products;
-    // products.forEach((item) => {
-    //   products.forEach((citem) => {
-    //     if (item._id === citem._id) {
-    //       item.number = item.number + 1
-    //     }
-    //   })
-    // })
-    // console.log("handled-=========products", products)
-    // return products;
-
-  }
   removeProduct = (item) => {
     const { removeProduct } = this.props;
-    removeProduct(item);
+    // removeProduct(item);
     console.log("remove=======product", item)
+  }
+  handleClear = () => {
+    const { clearCart } = this.props;
+    clearCart();
   }
   handledMenu = () => {
     const { user } = this.props;
@@ -173,7 +164,7 @@ class HeaderView extends Component {
           <IconFont
             type="iconregister"
             className="action-item"
-            onClick={() => { this.props.history.push("./register") }}
+            onClick={() => { this.props.history.push("/register") }}
           />
           注册
       </Menu.Item>
@@ -181,7 +172,7 @@ class HeaderView extends Component {
           <IconFont
             type="iconzhanghaodenglu"
             className="action-item"
-            onClick={() => { this.props.history.replace("./login") }}
+            onClick={() => { this.props.history.replace("/login") }}
           />
           登录
       </Menu.Item>}
@@ -205,56 +196,80 @@ class HeaderView extends Component {
       </Menu>
     );
   }
+  handleEmail = () => {
+    window.location.href = "https://outlook.live.com/owa/"
+  }
+
+  initColumns = () => {
+    this.columns = [
+      {
+        width: 130,
+        title: '',
+        render: (order) => {
+          return (
+            <div className="product-title">
+              <span>{order.name}</span>
+              <Avatar shape="square" className="header-action" size={32}
+                src={BASE_IMG_URL + order.imgs[0]} />
+            </div>
+          )
+        }
+
+      },
+      {
+        title: '',
+        // render: (number) => number  // 当前指定了对应的属性, 传入的是对应的属性值
+        render: (order) => {
+          return (
+            <InputNumber
+              size="small"
+              className="product-number"
+              min={1}
+              max={order.quantity}
+              defaultValue={order.number}
+              onChange={(order) => { console.log("======================order cart", order) }} />
+          )
+        }
+      },
+      {
+        title: '',
+        dataIndex: 'price',
+      },
+      {
+        title: '',
+        dataIndex: '',
+        render: (order) => {
+          return (
+            <IconFont type='icondelete' className='product-action'
+              onClick={(_, order) => { this.removeProduct(order) }}></IconFont>
+          )
+        }
+      },
+    ];
+  }
+
   render() {
 
     const { currentTime, dayPictureUrl, weather, isDrawerVisible } = this.state
 
     const username = this.props.user.username
     const products = this.props.cart.products;
-
-    // const menu =
-    //   (
-    //     <Menu onClick={() => { }}>
-    //       <Menu.Item key="1" icon={<UserOutlined />}>
-
-    //         <IconFont
-    //           type="iconregister"
-    //           className="action-item"
-    //         />
-    //         注册
-    //     </Menu.Item>
-    //       {/* <Menu.Item key="2" icon={<UserOutlined />}>
-    //       <IconFont
-    //         type="iconzhanghaodenglu"
-    //         className="action-item"
-    //       />
-    //       登录
-    //     </Menu.Item> */}
-    //       <Menu.Item key="3" icon={<UserOutlined />}>
-    //         <IconFont
-    //           type="iconlogout"
-    //           className="action-item"
-
-    //         />
-    //         退出
-    //     </Menu.Item>
-    //       <Menu.Item key="3" icon={<UserOutlined />}>
-    //         <IconFont
-    //           type="iconadmin"
-    //           className="action-item"
-    //           onClick={() => { this.props.history.push('/admin') }}
-    //         />
-    //         管理
-    //     </Menu.Item>
-
-    //     </Menu>
-    //   );
-
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      },
+      onSelect: (record, selected, selectedRows) => {
+        console.log(record, selected, selectedRows);
+      },
+      onSelectAll: (selected, selectedRows, changeRows) => {
+        console.log(selected, selectedRows, changeRows);
+      },
+    };
 
     // 得到当前需要显示的title
     // const title = this.getTitle()
     const title = this.props.headTitle
-    // const { user } = this.props;
+    // const {user} = this.props;
     return (
       <div className="header" >
         <div className="header-top">
@@ -272,44 +287,13 @@ class HeaderView extends Component {
               onClick={() => { this.props.history.push('/main') }}
             >
             </IconFont>
-            <IconFont
+            {/* <IconFont
               type="iconadvice"
               className="action-item header-action"
-              onClick={() => { this.props.history.push('/advice') }}
+              onClick={() => { this.setState({ isPopupDisabled: false }) }}
+            // onClick={() => { this.props.history.push('/advice') }}
             >
-            </IconFont>
-            {/* {(!user || !user._id) &&
-
-            <IconFont
-              type="iconzhanghaodenglu"
-              className="action-item"
-              onClick={() => { this.props.history.push('/login') }}
-            >
-            </IconFont>
-          } */}
-
-            {/* <IconFont
-            type="iconregister"
-            className="action-item"
-            onClick={() => { this.props.history.push('/register') }}
-          >
-          </IconFont> */}
-
-            {/* {user.isAdmin ?
-            <IconFont
-              type="iconadmin"
-              className="action-item"
-              onClick={() => { this.props.history.push('/admin') }}
-            >
-            </IconFont>
-            : null
-          } */}
-            {/* <IconFont
-            type="iconlogout"
-            className="action-item"
-            onClick={this.logout}
-          >
-          </IconFont> */}
+            </IconFont> */}
             <ShoppingCartOutlined className="action-item header-action" onClick={() => { this.onCartClick() }} />
             <Avatar shape="square" className="header-action" size={32} src={personal} onClick={() => { this.props.history.push("/main/personal") }} />
           </div>
@@ -330,32 +314,56 @@ class HeaderView extends Component {
           onClose={() => { this.onDrawerClose() }}
           visible={isDrawerVisible}
         >
-          {products ? <div className="cart-product" >
-            {this.handleProducts(products).map((item, index) => {
-              // console.log("购物车内商品", item)
-              return (<div className='product-wrap' key={index}>
-                <span className='product-title'>{item.name}</span>
-                <div className='product-content'>
-                  <Checkbox
-                    className='product-check'
-                    checked={this.state.checked}
-                    onChange={this.onChange}
-                  >
-                  </Checkbox>
-                  <Avatar shape="square" size={48} src={BASE_IMG_URL + item.imgs[0]} />
-                  <InputNumber size="small" className="product-number" min={1} max={100000} defaultValue={3} onChange={() => { }} />
-                  <IconFont type='icondelete' className='product-action'
-                    onClick={(item) => { this.removeProduct(item) }}></IconFont>
-                </div>
-              </div>)
-            })}
-            <div className='cart-footer'>
-              <Button className='footer-button cart-count'>结算</Button>
-              <Button className='footer-button '>清空</Button>
-            </div>
-          </div> : null}
 
+          <Table
+            bordered
+            rowKey='_id'
+            loading={false}
+            rowSelection={rowSelection}
+            dataSource={products}
+            columns={this.columns}
+          />
+          {/* {products ? <List
+            className="demo-loadmore-list"
+            loading={false}
+            itemLayout="horizontal"
+            // loadMore={loadMore}
+            dataSource={products}
+            renderItem={item => (
+              <List.Item
+                actions={[<IconFont type='icondelete' className='product-action'
+                  onClick={(_, item) => { this.removeProduct(item) }}></IconFont>,]}
+              >
+                <Checkbox
+                  className='product-check'
+                  checked={this.state.checked}
+                  onChange={this.onChange}
+                ></Checkbox>
+                <List.Item.Meta
+                  avatar={
+                    <Avatar shape="square" size={48} src={BASE_IMG_URL + item.imgs[0]} />
+                  }
+                  title={<span>{item.name}</span>}
+                  description={item.desc}
 
+                />
+                <InputNumber size="small" className="product-number" min={1} max={item.quantity} defaultValue={item.number} onChange={() => { }} />
+              </List.Item>
+            )}
+          /> : null} */}
+          <div className='cart-footer'>
+            <Button className='footer-button cart-count'>结算</Button>
+            <Button className='footer-button ' onClick={() => { this.handleClear() }}>清空</Button>
+          </div>
+          <Popconfirm title="欢迎提出建议"
+            icon={<IconFont
+              type="iconadvice"
+            // onClick={() => { this.props.history.push('/advice') }}
+            />}
+            // disabled={this.state.isPopupDisabled}
+            onConfirm={() => { this.handleEmail() }}
+          >
+          </Popconfirm>,
         </Drawer>
       </div >
 
@@ -365,5 +373,5 @@ class HeaderView extends Component {
 
 export default connect(
   state => ({ headTitle: state.headTitle, user: state.user, cart: state.cart }),
-  { logout, removeProduct }
+  { logout, removeProduct, clearCart }
 )(withRouter(HeaderView))

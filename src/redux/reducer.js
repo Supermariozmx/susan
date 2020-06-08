@@ -12,10 +12,9 @@ import {
   RECEIVE_USER,
   SHOW_ERROR_MSG,
   RESET_USER,
-  LOAD_CART,
   ADD_PRODUCT,
   REMOVE_PRODUCT,
-  CHANGE_PRODUCT_QUANTITY
+  CLEAR_CART
 } from './action-types'
 
 const initHeadTitle = ''
@@ -56,39 +55,51 @@ const initialState = {
 
 function cart(state = initialState, action) {
   switch (action.type) {
-    case LOAD_CART:
-      return {
-        ...state,
-        products: action.payload
-      };
     case ADD_PRODUCT:
-      return {
-        ...state,
-        productToAdd: Object.assign({}, action.payload),
-        products: [...state.products].concat(action.payload)
-      };
-    case REMOVE_PRODUCT:
-      // const newItem =  state.products.map((item)=>{
-      //   if(item.id!==action.id){
-      //     return item
-      //   }
-      // })
+      const newProduct = {
+        ...action.payload,
+        number: 1
+      }
+      let products = [...state.products];
+      if (products.length) {
+        let hasDouble = false;
+        products.forEach((product) => {
+          if (product._id === newProduct._id) {
+            hasDouble = true;
+          }
+        })
+        if (hasDouble) {
+          products.forEach((product) => {
+            if (product._id === newProduct._id) {
+              product.number += product.number
+            }
+          })
+        } else {
+          products = [...products, newProduct];
+        }
+        return {
+          // productToAdd: Object.assign({}, action.payload),
+          products: products,
+        };
+      } else {
+        return {
+          // productToAdd: Object.assign({}, action.payload),
+          products: [newProduct]
+        };
+      }
 
-      // return {
-      //   ...state,
-      //   productToRemove: Object.assign({}, action.payload),
-      //   products: newItem
-      // };
+
+
+    case REMOVE_PRODUCT:
       return {
         ...state,
         products: handleRemoveProduct(state.products, action.id)
       }
-
-    case CHANGE_PRODUCT_QUANTITY:
+    case CLEAR_CART:
       return {
-        ...state,
-        productToChange: Object.assign({}, action.payload)
-      };
+        products: []
+      }
+
     default:
       return state;
   }

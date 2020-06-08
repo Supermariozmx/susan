@@ -9,3 +9,4 @@ export const LOAD_CART = "load_cart"
 export const ADD_PRODUCT = "add_product"
 export const REMOVE_PRODUCT = 'remove_product'
 export const CHANGE_PRODUCT_QUANTITY = 'change_product_quantity'
+export const CLEAR_CART = 'clear_cart'
