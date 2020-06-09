@@ -140,3 +140,8 @@ export const updateOderStatus = (orderId, status) => ajax(BASE + '/manage/order/
 
 //修改订单内容
 export const updateOrder = (order) => ajax(BASE + '/manage/order/update', order, 'POST')
+
+export const addOrder = (order) => ajax(BASE + '/manage/order/add', order, 'POST')
+
+export const reqPersonalOrder = (userId) => ajax(BASE + '/manage/order/personal', {userId })
+

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { Modal, Icon, Drawer, Avatar, Button, Dropdown, Menu, Popconfirm, Table, InputNumber } from 'antd'
+import { Modal, Icon, Drawer, Avatar, Button, Dropdown, Menu, Popconfirm, Table, InputNumber, message } from 'antd'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { ShoppingCartOutlined, DownOutlined, UserOutlined } from '@ant-design/icons';
@@ -11,7 +11,7 @@ import { reqWeather } from '../../api'
 import menuList from '../../config/menuConfig'
 import { formateDate } from '../../utils/dateUtils'
 import './index.less'
-import { logout, removeProduct, clearCart, setProductNumber } from '../../redux/actions'
+import { logout, removeProduct, clearCart, setProductNumber, selectProducts } from '../../redux/actions'
 
 
 const IconFont = Icon.createFromIconfontCN({
@@ -176,7 +176,7 @@ class HeaderView extends Component {
 
   handleRemoveProduct = (product) => {
     const { removeProduct } = this.props;
-    // removeProduct(product);
+    removeProduct(product);
     console.log("remove=======product", product)
   }
   handleClear = () => {
@@ -228,6 +228,8 @@ class HeaderView extends Component {
     window.location.href = "https://outlook.live.com/owa/"
   }
   handleProductNumber = (value, product) => {
+    const { setProductNumber } = this.props;
+    setProductNumber(value, product);
     console.log("===================number", value);
     console.log("-------------------order", product);
     product.number = value;
@@ -235,10 +237,22 @@ class HeaderView extends Component {
 
   }
   handleAccount = () => {
+    // const { user } = this.props;
+    // if (user && user.address && user.phone && user.username) {
+    //   this.setState({
+    //     isDrawerVisible: false
+    //   })
+    //   this.props.history.push("/main/account")
+    // } else {
+    //   message.error("信息不完善，无法购买，请完善信息")
+    // }
+
+
     this.setState({
       isDrawerVisible: false
     })
     this.props.history.push("/main/account")
+
   }
   initColumns = () => {
     this.columns = [
@@ -293,10 +307,12 @@ class HeaderView extends Component {
 
     const username = this.props.user.username
     const products = this.props.cart.products;
+    const { selectProducts } = this.props;
     const rowSelection = {
       //可直接根据onChange来确定选择了哪行物品
       onChange: (selectedRowKeys, selectedRows) => {
         console.log("===============onChange")
+        selectProducts(selectedRows);
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       },
       // onSelect: (record, selected, selectedRows) => {
@@ -388,5 +404,5 @@ class HeaderView extends Component {
 
 export default connect(
   state => ({ headTitle: state.headTitle, user: state.user, cart: state.cart }),
-  { logout, removeProduct, clearCart, setProductNumber }
+  { logout, removeProduct, clearCart, setProductNumber, selectProducts }
 )(withRouter(HeaderView))

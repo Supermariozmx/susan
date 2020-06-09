@@ -15,7 +15,8 @@ import {
   ADD_PRODUCT,
   REMOVE_PRODUCT,
   CLEAR_CART,
-  SET_NUMBER
+  SET_NUMBER,
+  SELECT_PRODUCTS
 } from './action-types'
 
 const initHeadTitle = ''
@@ -51,7 +52,8 @@ function user(state = initUser, action) {
 
 
 const initialState = {
-  products: []
+  products: [],
+  selectProducts: []
 };
 
 function cart(state = initialState, action) {
@@ -96,16 +98,21 @@ function cart(state = initialState, action) {
       return {
         products: []
       }
-      case SET_NUMBER:
-          let storeProducts = [...state.products];
-          storeProducts.forEach((product)=>{
-            if(product._id===action.payload._id){
-              product.number=action.payload.number
-            }
-          })
-        return{
-        products:storeProducts
+    case SET_NUMBER:
+      let storeProducts = [...state.products];
+      storeProducts.forEach((product) => {
+        if (product._id === action.payload._id) {
+          product.number = action.number
         }
+      })
+      return {
+        products: storeProducts
+      }
+    case SELECT_PRODUCTS:
+      return { 
+        ...state,
+        selectProducts: action.payload 
+      }
 
     default:
       return state;

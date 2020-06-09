@@ -18,6 +18,7 @@ import PayMent from '../payment/payment';
 import PersonalCenter from '../personal/personal';
 import Account from '../account/account';
 import SuccessPay from '../successpay/successpay';
+import PersonalOrder from '../personalorder/personal_order';
 
 // const { Search } = Input;
 const { Content, Sider, Footer } = Layout;
@@ -147,6 +148,7 @@ class Main extends Component {
                                 <Route key="detail" path="/main/detail/:id" component={ClothingDetail} />,
                                 <Route key="payment" path="/main/payment" component={PayMent} />,
                                 <Route path='/main/personal' component={PersonalCenter} />
+                                <Route path='/main/personal/order' component={PersonalOrder} />
                                 <Route path='/main/account' component={Account} />
                                 <Route path='/main/successpay' component={SuccessPay} />
                                 <Route component={NotFound} />
@@ -166,8 +168,3 @@ export default connect(
     {}
 )(Main)
 
-
-                // export default connect(
-//     state => ({user: state.user}),
-//     {}
-//   )(withRouter(LeftNav))

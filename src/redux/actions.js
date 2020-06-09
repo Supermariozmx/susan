@@ -14,6 +14,7 @@ import {
   CHANGE_PRODUCT_QUANTITY,
   CLEAR_CART,
   SET_NUMBER,
+  SELECT_PRODUCTS
 } from './action-types'
 import { reqLogin } from '../api'
 import storageUtils from "../utils/storageUtils";
@@ -89,9 +90,15 @@ export const removeProduct = product => ({
   payload: product
 });
 
-export const setProductNumber=(product)=>({
+export const setProductNumber = (value, product) => ({
   type: SET_NUMBER,
+  number: value,
   payload: product
+})
+
+export const selectProducts = (products) => ({
+  type: SELECT_PRODUCTS,
+  payload: products
 })
 
 export const changeProductQuantity = product => ({

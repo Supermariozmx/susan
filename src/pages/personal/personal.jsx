@@ -59,7 +59,9 @@ class PersonalCenter extends Component {
             }
         })
     }
-
+    personalOrder = () => {
+        // this.props.history.push("/main/personal/order")
+    }
     render() {
         const { getFieldDecorator } = this.props.form
         // const { imgs } = this.props.user
@@ -137,6 +139,7 @@ class PersonalCenter extends Component {
                     <Item>
                         <Button type='primary' onClick={this.submit}>提交</Button>
                     </Item>
+                    <Button type='primary' onClick={() => { this.personalOrder() }}>我的订单</Button>
                 </Form>
             </Card>
         )

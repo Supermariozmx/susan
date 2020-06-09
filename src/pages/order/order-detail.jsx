@@ -62,9 +62,9 @@ export default class OrderDetail extends Component {
                             {products ?
                                 products.map(item => (
                                     <div className="order-product-content">
-                                        <span className="order-product-name product-item">{item.productName}</span>
-                                        <span className="order-product-price product-item">{item.productPrice}元</span>
-                                        <span className="order-product-number">X{item.productNumber}</span>
+                                        <span className="order-product-name product-item">{item.name}</span>
+                                        <span className="order-product-price product-item">{item.price}元</span>
+                                        <span className="order-product-number">X{item.number}</span>
                                     </div>
                                 ))
                                 : null

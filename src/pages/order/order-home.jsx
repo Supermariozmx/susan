@@ -112,7 +112,6 @@ export default class OrderHome extends Component {
         this.setState({ loading: true }) // 显示loading
 
         const { searchName, searchType } = this.state
-        // 如果搜索关键字有值, 说明我们要做搜索分页
         let result
         if (searchName) {
             result = await reqSearchOrders({ pageNum, pageSize: PAGE_SIZE, searchName, searchType })
@@ -154,8 +153,6 @@ export default class OrderHome extends Component {
 
         // 取出状态数据
         const { orders, total, loading, searchType, searchName } = this.state
-
-
 
         const title = (
             <span>

@@ -3,6 +3,7 @@ import { Card, List, Icon, Avatar, Switch, Input, Button, message } from 'antd'
 import { BASE_IMG_URL } from "../../utils/constants"
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { addOrder } from '../../api'
 import "./account.less"
 
 
@@ -16,6 +17,7 @@ class Account extends Component {
             receiverName: "",
             isLoadingAccountDetail: true,
             // isInfoFormatError: false
+            isReceiverInfoChanged: false
         }
     }
 
@@ -24,13 +26,20 @@ class Account extends Component {
         this.setState({ isSwitchChecked: !isSwitchChecked })
     }
     handleSaveInfo = () => {
+        let isPassed = true;
         const { receiverAddress, receiverPhone, receiverName } = this.state;
         const postInfo = { receiverAddress, receiverPhone, receiverName };
         if (!receiverAddress || !receiverPhone || !receiverName) {
+            this.isPassed = false
             message.error("请您检查收货人姓名、电话、地址是否已填写")
         }
         if (!receiverPhone.match(/^1[3|4|5|8][0-9]\d{4,8}$/)) {
+            this.isPassed = false
             message.error("检查电话号码格式是否正确")
+        }
+        if (isPassed) {
+            message.success("收货人信息修改成功");
+            this.setState({ isReceiverInfoChanged: true })
         }
         console.log("--------------postInfo", postInfo);
     }
@@ -41,6 +50,21 @@ class Account extends Component {
         })
     }
     handlePay = () => {
+        const { isReceiverInfoChanged, receiverAddress, receiverPhone, receiverName } = this.state
+        const { user } = this.props;
+        const { username, _id, address, phone } = user;
+        const { products, selectProducts } = this.props.cart;
+        const orderProducts = selectProducts ? selectProducts : products
+        const order = {
+            userName: isReceiverInfoChanged ? receiverName : username,
+            userId: _id,
+            userPhone: isReceiverInfoChanged ? receiverPhone : phone,
+            userAddress: isReceiverInfoChanged ? receiverAddress : address,
+            orderPrice: this.totalMoney,
+            products: orderProducts,
+            status: "paid",
+        }
+        addOrder(order)
         this.props.history.push("/main/payment");
     }
 
@@ -49,98 +73,63 @@ class Account extends Component {
     }
 
     handleMoney = () => {
-        const mockData = [{
-            categoryId: "5eb7b9bbf70c283f343efc20",
-            desc: "你就是最美的仙女",
-            detail: "<p></p>↵",
-            imgs: ["image-1590812451282.jpg"],
-            name: "最美连衣裙",
-            pCategoryId: "5eb7b987f70c283f343efc1d",
-            price: 188,
-            quantity: 9,
-            status: 1,
-            _id: "5eb7b968f70c283f343efc1c",
-            number: 1
-        },
-        {
-            categoryId: "5eb7b9bbf70c283f343efc20",
-            desc: "复古、修身",
-            detail: "<p></p>↵",
-            imgs: ["image-1590812451282.jpg"],
-            name: "复古连衣裙",
-            pCategoryId: "5eb7b987f70c283f343efc1d",
-            price: 188,
-            quantity: 9,
-            status: 1,
-            _id: "test2",
-            number: 1
-        },
-        {
-            categoryId: "5eb7b9bbf70c283f343efc20",
-            desc: "红色连衣裙",
-            detail: "<p></p>↵",
-            imgs: ["image-1590812451282.jpg"],
-            name: "显瘦连衣裙",
-            pCategoryId: "5eb7b987f70c283f343efc1d",
-            price: 168,
-            quantity: 9,
-            status: 2,
-            _id: "test3",
-            number: 1
-        },
-        ]
+        // const mockData = [{
+        //     categoryId: "5eb7b9bbf70c283f343efc20",
+        //     desc: "你就是最美的仙女",
+        //     detail: "<p></p>↵",
+        //     imgs: ["image-1590812451282.jpg"],
+        //     name: "最美连衣裙",
+        //     pCategoryId: "5eb7b987f70c283f343efc1d",
+        //     price: 188,
+        //     quantity: 9,
+        //     status: 1,
+        //     _id: "5eb7b968f70c283f343efc1c",
+        //     number: 1
+        // },
+        // {
+        //     categoryId: "5eb7b9bbf70c283f343efc20",
+        //     desc: "复古、修身",
+        //     detail: "<p></p>↵",
+        //     imgs: ["image-1590812451282.jpg"],
+        //     name: "复古连衣裙",
+        //     pCategoryId: "5eb7b987f70c283f343efc1d",
+        //     price: 188,
+        //     quantity: 9,
+        //     status: 1,
+        //     _id: "test2",
+        //     number: 1
+        // },
+        // {
+        //     categoryId: "5eb7b9bbf70c283f343efc20",
+        //     desc: "红色连衣裙",
+        //     detail: "<p></p>↵",
+        //     imgs: ["image-1590812451282.jpg"],
+        //     name: "显瘦连衣裙",
+        //     pCategoryId: "5eb7b987f70c283f343efc1d",
+        //     price: 168,
+        //     quantity: 9,
+        //     status: 2,
+        //     _id: "test3",
+        //     number: 1
+        // },
+        // ]
+        const { products, selectProducts } = this.props.cart;
         this.setState({ isLoadingAccountDetail: true })
         let sum = 0;
-        mockData.forEach((item) => {
-            sum = sum + item.price * item.number;
-        })
+        const handledProducts = selectProducts ? selectProducts : products
+        if (handledProducts) {
+            handledProducts.forEach((item) => {
+                sum = sum + item.price * item.number;
+            })
+        }
+
         this.totalMoney = sum;
         this.setState({ isLoadingAccountDetail: false })
     }
     render() {
         const { isSwitchChecked, receiverAddress, receiverPhone, receiverName, isLoadingAccountDetail } = this.state;
-        const mockData = [{
-            categoryId: "5eb7b9bbf70c283f343efc20",
-            desc: "你就是最美的仙女",
-            detail: "<p></p>↵",
-            imgs: ["image-1590812451282.jpg"],
-            name: "最美连衣裙",
-            pCategoryId: "5eb7b987f70c283f343efc1d",
-            price: 188,
-            quantity: 9,
-            status: 1,
-            _id: "5eb7b968f70c283f343efc1c",
-            number: 1
-        },
-        {
-            categoryId: "5eb7b9bbf70c283f343efc20",
-            desc: "复古、修身",
-            detail: "<p></p>↵",
-            imgs: ["image-1590812451282.jpg"],
-            name: "复古连衣裙",
-            pCategoryId: "5eb7b987f70c283f343efc1d",
-            price: 188,
-            quantity: 9,
-            status: 1,
-            _id: "test2",
-            number: 1
-        },
-        {
-            categoryId: "5eb7b9bbf70c283f343efc20",
-            desc: "红色连衣裙",
-            detail: "<p></p>↵",
-            imgs: ["image-1590812451282.jpg"],
-            name: "显瘦连衣裙",
-            pCategoryId: "5eb7b987f70c283f343efc1d",
-            price: 168,
-            quantity: 9,
-            status: 2,
-            _id: "test3",
-            number: 1
-        },
-        ]
-        // const itemValue = this.props.history.location.state.item
-        // console.log("===========itemValue", itemValue)
+        const { products, selectProducts } = this.props.cart;
+        const { user } = this.props;
         const title = (
             <span>
                 <Icon
@@ -162,7 +151,7 @@ class Account extends Component {
                         loading={false}
                         itemLayout="horizontal"
                         // loadMore={loadMore}
-                        dataSource={mockData}
+                        dataSource={selectProducts ? selectProducts : products}
                         renderItem={item => (
                             <List.Item
                             >
@@ -178,8 +167,6 @@ class Account extends Component {
                         )}
                     />
                     <div className="account-total-money">总金额：{this.totalMoney}</div>
-                    {/* 在订单结算时，可以让用户修改地址。
-                    检测用户是否有地址放在点击结算按钮时判断，若没有按钮则直接弹出提示“请在个人中心设置地址”。 */}
                     <Switch
                         className="switch-toggle"
                         checkedChildren="修改地址"
@@ -216,16 +203,15 @@ class Account extends Component {
                             />
                             <Button
                                 type="primary"
-                                shape="circle"
+                                shape="round"
                                 size="default"
                                 onClick={() => { this.handleSaveInfo() }}
-                            // disabled={isInfoFormatError}
                             >确认</Button>
                         </div>
                         : <div>
-                            <p>联系人：mario</p>
-                            <p>手机号：18742017518</p>
-                            <p>用户地址：辽宁省大连市甘井子区大连工业大学</p>
+                            <p>联系人：{user ? user.username : ""}</p>
+                            <p>手机号：{user ? user.phone : ""}</p>
+                            <p>用户地址：{user ? user.address : ""}</p>
                         </div>
                     }
                     <Button type="primary" className="account-footer-button" onClick={() => { this.handlePay() }} >确认付款</Button>
