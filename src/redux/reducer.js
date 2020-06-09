@@ -14,7 +14,8 @@ import {
   RESET_USER,
   ADD_PRODUCT,
   REMOVE_PRODUCT,
-  CLEAR_CART
+  CLEAR_CART,
+  SET_NUMBER
 } from './action-types'
 
 const initHeadTitle = ''
@@ -78,17 +79,13 @@ function cart(state = initialState, action) {
           products = [...products, newProduct];
         }
         return {
-          // productToAdd: Object.assign({}, action.payload),
           products: products,
         };
       } else {
         return {
-          // productToAdd: Object.assign({}, action.payload),
           products: [newProduct]
         };
       }
-
-
 
     case REMOVE_PRODUCT:
       return {
@@ -99,6 +96,16 @@ function cart(state = initialState, action) {
       return {
         products: []
       }
+      case SET_NUMBER:
+          let storeProducts = [...state.products];
+          storeProducts.forEach((product)=>{
+            if(product._id===action.payload._id){
+              product.number=action.payload.number
+            }
+          })
+        return{
+        products:storeProducts
+        }
 
     default:
       return state;

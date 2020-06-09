@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Radio,Icon } from 'antd';
+import { Radio, Icon, Button } from 'antd';
 import './payment.less'
 
 const IconFont = Icon.createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_1818861_6i8268debnx.js',
-    
-  });
+
+});
 
 class PayMent extends Component {
     render() {
@@ -15,13 +15,15 @@ class PayMent extends Component {
                 <div className="payment">
                     <div className="pay">
                         <Radio checked={true}></Radio>
-                        <IconFont type="iconpay" className="pay-icon"/>
+                        <IconFont type="iconpay" className="pay-icon" />
                     </div>
                     <div className="wechat">
                         <Radio></Radio>
-                        <IconFont type="iconwechat" className="wechat-icon"/>
+                        <IconFont type="iconwechat" className="wechat-icon" />
                     </div>
+                    
                 </div>
+                <Button className="payment-button">付款</Button>
             </div>
         )
     }

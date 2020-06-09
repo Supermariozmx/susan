@@ -11,7 +11,7 @@ import { reqWeather } from '../../api'
 import menuList from '../../config/menuConfig'
 import { formateDate } from '../../utils/dateUtils'
 import './index.less'
-import { logout, removeProduct, clearCart } from '../../redux/actions'
+import { logout, removeProduct, clearCart, setProductNumber } from '../../redux/actions'
 
 
 const IconFont = Icon.createFromIconfontCN({
@@ -20,7 +20,7 @@ const IconFont = Icon.createFromIconfontCN({
 });
 
 
-// const mockdata = [{
+// const mockData = [{
 //   categoryId: "5eb7b9bbf70c283f343efc20",
 //   desc: "你就是最美的仙女",
 //   detail: "<p></p>↵",
@@ -30,8 +30,36 @@ const IconFont = Icon.createFromIconfontCN({
 //   price: 188,
 //   quantity: 9,
 //   status: 1,
-//   _id: "5eb7b968f70c283f343efc1c"
-// }]
+//   _id: "5eb7b968f70c283f343efc1c",
+//   number: 1
+// },
+// {
+//   categoryId: "5eb7b9bbf70c283f343efc20",
+//   desc: "复古、修身",
+//   detail: "<p></p>↵",
+//   imgs: ["image-1590812451282.jpg"],
+//   name: "复古连衣裙",
+//   pCategoryId: "5eb7b987f70c283f343efc1d",
+//   price: 188,
+//   quantity: 9,
+//   status: 1,
+//   _id: "test2",
+//   number: 1
+// },
+// {
+//   categoryId: "5eb7b9bbf70c283f343efc20",
+//   desc: "红色连衣裙",
+//   detail: "<p></p>↵",
+//   imgs: ["image-1590812451282.jpg"],
+//   name: "显瘦连衣裙",
+//   pCategoryId: "5eb7b987f70c283f343efc1d",
+//   price: 168,
+//   quantity: 9,
+//   status: 2,
+//   _id: "test3",
+//   number: 1
+// },
+// ]
 
 /*
 左侧导航的组件
@@ -146,10 +174,10 @@ class HeaderView extends Component {
     this.setState({ isDrawerVisible: false });
   }
 
-  removeProduct = (item) => {
+  handleRemoveProduct = (product) => {
     const { removeProduct } = this.props;
-    // removeProduct(item);
-    console.log("remove=======product", item)
+    // removeProduct(product);
+    console.log("remove=======product", product)
   }
   handleClear = () => {
     const { clearCart } = this.props;
@@ -199,18 +227,30 @@ class HeaderView extends Component {
   handleEmail = () => {
     window.location.href = "https://outlook.live.com/owa/"
   }
+  handleProductNumber = (value, product) => {
+    console.log("===================number", value);
+    console.log("-------------------order", product);
+    product.number = value;
+    console.log("handled product ---------", product)
 
+  }
+  handleAccount = () => {
+    this.setState({
+      isDrawerVisible: false
+    })
+    this.props.history.push("/main/account")
+  }
   initColumns = () => {
     this.columns = [
       {
         width: 130,
         title: '',
-        render: (order) => {
+        render: (product) => {
           return (
             <div className="product-title">
-              <span>{order.name}</span>
+              <span>{product.name}</span>
               <Avatar shape="square" className="header-action" size={32}
-                src={BASE_IMG_URL + order.imgs[0]} />
+                src={BASE_IMG_URL + product.imgs[0]} />
             </div>
           )
         }
@@ -218,16 +258,15 @@ class HeaderView extends Component {
       },
       {
         title: '',
-        // render: (number) => number  // 当前指定了对应的属性, 传入的是对应的属性值
-        render: (order) => {
+        render: (product) => {
           return (
             <InputNumber
               size="small"
               className="product-number"
               min={1}
-              max={order.quantity}
-              defaultValue={order.number}
-              onChange={(order) => { console.log("======================order cart", order) }} />
+              max={product.quantity}
+              defaultValue={product.number}
+              onChange={(value) => { this.handleProductNumber(value, product) }} />
           )
         }
       },
@@ -238,10 +277,10 @@ class HeaderView extends Component {
       {
         title: '',
         dataIndex: '',
-        render: (order) => {
+        render: (product) => {
           return (
             <IconFont type='icondelete' className='product-action'
-              onClick={(_, order) => { this.removeProduct(order) }}></IconFont>
+              onClick={() => { this.handleRemoveProduct(product) }}></IconFont>
           )
         }
       },
@@ -255,19 +294,21 @@ class HeaderView extends Component {
     const username = this.props.user.username
     const products = this.props.cart.products;
     const rowSelection = {
+      //可直接根据onChange来确定选择了哪行物品
       onChange: (selectedRowKeys, selectedRows) => {
+        console.log("===============onChange")
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       },
-      onSelect: (record, selected, selectedRows) => {
-        console.log(record, selected, selectedRows);
-      },
-      onSelectAll: (selected, selectedRows, changeRows) => {
-        console.log(selected, selectedRows, changeRows);
+      // onSelect: (record, selected, selectedRows) => {
+      //   console.log("===============onSelect")
+      //   console.log(record, selected, selectedRows);
+      // },
+      onSelectAll: (selected, selectedRows) => {
+        console.log("===============onSelectAll")
+        console.log(selected, selectedRows);
       },
     };
 
-    // 得到当前需要显示的title
-    // const title = this.getTitle()
     const title = this.props.headTitle
     // const {user} = this.props;
     return (
@@ -316,43 +357,17 @@ class HeaderView extends Component {
         >
 
           <Table
-            bordered
+            bordered={false}
+            // showHeader={false}
             rowKey='_id'
             loading={false}
             rowSelection={rowSelection}
             dataSource={products}
             columns={this.columns}
+            pagination={false}
           />
-          {/* {products ? <List
-            className="demo-loadmore-list"
-            loading={false}
-            itemLayout="horizontal"
-            // loadMore={loadMore}
-            dataSource={products}
-            renderItem={item => (
-              <List.Item
-                actions={[<IconFont type='icondelete' className='product-action'
-                  onClick={(_, item) => { this.removeProduct(item) }}></IconFont>,]}
-              >
-                <Checkbox
-                  className='product-check'
-                  checked={this.state.checked}
-                  onChange={this.onChange}
-                ></Checkbox>
-                <List.Item.Meta
-                  avatar={
-                    <Avatar shape="square" size={48} src={BASE_IMG_URL + item.imgs[0]} />
-                  }
-                  title={<span>{item.name}</span>}
-                  description={item.desc}
-
-                />
-                <InputNumber size="small" className="product-number" min={1} max={item.quantity} defaultValue={item.number} onChange={() => { }} />
-              </List.Item>
-            )}
-          /> : null} */}
           <div className='cart-footer'>
-            <Button className='footer-button cart-count'>结算</Button>
+            <Button className='footer-button cart-count' onClick={() => { this.handleAccount() }}>结算</Button>
             <Button className='footer-button ' onClick={() => { this.handleClear() }}>清空</Button>
           </div>
           <Popconfirm title="欢迎提出建议"
@@ -373,5 +388,5 @@ class HeaderView extends Component {
 
 export default connect(
   state => ({ headTitle: state.headTitle, user: state.user, cart: state.cart }),
-  { logout, removeProduct, clearCart }
+  { logout, removeProduct, clearCart, setProductNumber }
 )(withRouter(HeaderView))

@@ -12,7 +12,8 @@ import {
   ADD_PRODUCT,
   REMOVE_PRODUCT,
   CHANGE_PRODUCT_QUANTITY,
-  CLEAR_CART
+  CLEAR_CART,
+  SET_NUMBER,
 } from './action-types'
 import { reqLogin } from '../api'
 import storageUtils from "../utils/storageUtils";
@@ -83,12 +84,15 @@ export const addProduct = product => {
   });
 }
 
-
-
 export const removeProduct = product => ({
   type: REMOVE_PRODUCT,
   payload: product
 });
+
+export const setProductNumber=(product)=>({
+  type: SET_NUMBER,
+  payload: product
+})
 
 export const changeProductQuantity = product => ({
   type: CHANGE_PRODUCT_QUANTITY,

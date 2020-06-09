@@ -16,6 +16,8 @@ import ClothingDetail from "../detail/detail"
 import NotFound from '../not-found/not-found'
 import PayMent from '../payment/payment';
 import PersonalCenter from '../personal/personal';
+import Account from '../account/account';
+import SuccessPay from '../successpay/successpay';
 
 // const { Search } = Input;
 const { Content, Sider, Footer } = Layout;
@@ -24,8 +26,8 @@ const { SubMenu } = Menu;
 
 const IconFont = Icon.createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_1818861_yrxd09gtnpg.js',
-    
-  });
+
+});
 
 class Main extends Component {
 
@@ -145,6 +147,8 @@ class Main extends Component {
                                 <Route key="detail" path="/main/detail/:id" component={ClothingDetail} />,
                                 <Route key="payment" path="/main/payment" component={PayMent} />,
                                 <Route path='/main/personal' component={PersonalCenter} />
+                                <Route path='/main/account' component={Account} />
+                                <Route path='/main/successpay' component={SuccessPay} />
                                 <Route component={NotFound} />
                             </Switch>
                         </Content>
