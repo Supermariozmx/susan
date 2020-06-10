@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Radio, Icon, Button } from 'antd';
 import './payment.less'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 
 const IconFont = Icon.createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_1818861_6i8268debnx.js',
@@ -8,6 +10,9 @@ const IconFont = Icon.createFromIconfontCN({
 });
 
 class PayMent extends Component {
+    handlePaySuccess = () => {
+        this.props.history.push("/main/successpay");
+    }
     render() {
         return (
             <div className="payment-view">
@@ -21,13 +26,19 @@ class PayMent extends Component {
                         <Radio></Radio>
                         <IconFont type="iconwechat" className="wechat-icon" />
                     </div>
-                    
+
                 </div>
-                <Button className="payment-button">付款</Button>
+                <Button className="payment-button" onClick={() => { this.handlePaySuccess() }}>付款</Button>
             </div>
         )
     }
 
 }
 
-export default PayMent;
+
+
+
+export default connect(
+    state => ({}),
+    {}
+)(withRouter(PayMent))

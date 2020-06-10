@@ -53,18 +53,8 @@ export default class OrderHome extends Component {
                 title: '状态',
                 // dataIndex: 'status',
                 render: (order) => {
-                    // const { status, _id } = order
-                    // const newStatus = status === 1 ? 2 : 1
-                    // 商品状态: 1:未完成, 2: 已完成
                     return (
                         <span>
-                            {/* <Button
-                                type='primary'
-                                onClick={() => this.updateStatus(_id, newStatus)}
-                            >
-                                {status === 1 ? '结束' : '物流中'}
-                            </Button> */}
-
                             <span>物流中</span>
                         </span>
                     )

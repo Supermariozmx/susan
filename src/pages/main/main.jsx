@@ -19,6 +19,7 @@ import PersonalCenter from '../personal/personal';
 import Account from '../account/account';
 import SuccessPay from '../successpay/successpay';
 import PersonalOrder from '../personalorder/personal_order';
+import MyOrderDetail from '../personalorder/myorder_detail';
 
 // const { Search } = Input;
 const { Content, Sider, Footer } = Layout;
@@ -148,9 +149,11 @@ class Main extends Component {
                                 <Route key="detail" path="/main/detail/:id" component={ClothingDetail} />,
                                 <Route key="payment" path="/main/payment" component={PayMent} />,
                                 <Route path='/main/personal' component={PersonalCenter} />
-                                <Route path='/main/personal/order' component={PersonalOrder} />
+                                <Route path='/main/myorder' component={PersonalOrder} />
+                                <Route key="order_detail" path="/main/orderdetail/:id" component={MyOrderDetail} />,
                                 <Route path='/main/account' component={Account} />
                                 <Route path='/main/successpay' component={SuccessPay} />
+                                
                                 <Route component={NotFound} />
                             </Switch>
                         </Content>

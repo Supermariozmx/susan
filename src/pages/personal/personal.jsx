@@ -59,8 +59,10 @@ class PersonalCenter extends Component {
             }
         })
     }
+
+
     personalOrder = () => {
-        // this.props.history.push("/main/personal/order")
+        this.props.history.push("/main/myorder")
     }
     render() {
         const { getFieldDecorator } = this.props.form
