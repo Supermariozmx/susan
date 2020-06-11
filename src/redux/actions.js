@@ -69,7 +69,15 @@ export const login = (username, password) => {
   }
 }
 
-export const ModifyUser = (user) => ({
+
+export const ModifyUser = (user) => {
+  return dispatch => {
+    storageUtils.saveUser(user)
+    dispatch(ModifyUserInfo(user))
+  }
+
+}
+export const ModifyUserInfo = (user) => ({
   type: MODIFY_USER,
   payload: user
 })

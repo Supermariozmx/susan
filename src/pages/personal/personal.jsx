@@ -3,6 +3,7 @@ import { Card, Icon, Form, Button, message, Modal, Upload } from 'antd'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { reqAddOrUpdateUser, reqOneUser } from "../../api/index";
+import { ModifyUser } from "../../redux/actions";
 import ModifyPersonalForm from "./modify-personal"
 import TweenOne from 'rc-tween-one';
 import PropTypes from 'prop-types';
@@ -91,7 +92,7 @@ class PersonalCenter extends Component {
 
 
     handleUpdateUser = async () => {
-
+        const { ModifyUser } = this.props;
         this.setState({ isModalShow: false })
 
         // 1. 收集输入数据
@@ -102,11 +103,13 @@ class PersonalCenter extends Component {
         user._id = this.id
         // 2. 提交添加的请求
         const result = await reqAddOrUpdateUser(user)
+
         // 3. 更新列表显示
         if (result.status === 0) {
             message.success("成功修改资料")
             //此处需要更新redux中的state需要重新取出新的数据！！！！important
-            this.getUsers()
+            ModifyUser(user)
+            this.handleRequestUser()
         } else {
             message.error("更新信息失败")
         }
@@ -128,23 +131,24 @@ class PersonalCenter extends Component {
     handleChange = ({ fileList }) => this.setState({ fileList })
 
     render() {
-        const mockUser = {
-            "_id": "5eddd02d62af5b1efcedf63a",
-            "isAdmin": true,
-            "imgs": ["image-1589345440541.jpg"],
-            "username": "zane",
-            "password": "e10adc3949ba59abbe56e057f20f883e",
-            "phone": "18898089999",
-            "email": "1469080717@qq.com",
-            "role_id": "5eb7ba24f70c283f343efc23",
-            "create_time": 1591595053071,
-            "address": "法国巴黎",
-            "__v": 0
-        }
+        // const mockUser = {
+        //     "_id": "5eddd02d62af5b1efcedf63a",
+        //     "isAdmin": true,
+        //     "imgs": ["image-1589345440541.jpg"],
+        //     "username": "zane",
+        //     "password": "e10adc3949ba59abbe56e057f20f883e",
+        //     "phone": "18898089999",
+        //     "email": "1469080717@qq.com",
+        //     "role_id": "5eb7ba24f70c283f343efc23",
+        //     "create_time": 1591595053071,
+        //     "address": "法国巴黎",
+        //     "__v": 0
+        // }
         // const { getFieldDecorator } = this.props.form
         // const { imgs } = this.props.user
-        const { username, phone, email, address, imgs } = mockUser;
         const { renderData, isModalShow } = this.state;
+        const { username, phone, email, address, imgs } = renderData;
+
         const title = (
             <span>
                 <Icon
@@ -205,7 +209,7 @@ class PersonalCenter extends Component {
                 >
                     <ModifyPersonalForm
                         setForm={form => this.form = form}
-                        user={mockUser}
+                        user={renderData}
                     />
                 </Modal>
                 <TweenOne
@@ -244,5 +248,5 @@ class PersonalCenter extends Component {
 
 export default connect(
     state => ({ headTitle: state.headTitle, user: state.user, cart: state.cart }),
-    {}
+    { ModifyUser }
 )(withRouter(Form.create()(PersonalCenter)))

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Spin, message } from 'antd';
+import { Card, Spin, message, Icon } from 'antd';
 import { connect } from 'react-redux'
 import { PictureTwoTone, ShoppingCartOutlined } from '@ant-design/icons';
 import { reqVarietyProduct } from "../../api/index"
@@ -7,6 +7,12 @@ import { BASE_IMG_URL } from '../../utils/constants'
 import "./index.less"
 import { addProduct } from '../../redux/actions'
 const { Meta } = Card;
+
+const IconFont = Icon.createFromIconfontCN({
+    scriptUrl: '//at.alicdn.com/t/font_1818861_45iwl1fr4p2.js',
+
+});
+
 
 class ClothingCard extends Component {
     constructor(props) {
@@ -40,12 +46,15 @@ class ClothingCard extends Component {
     showDetail = (item) => {
         this.props.history.push({ pathname: `/main/detail/${item._id}`, state: { item } });
     }
+    buyNow=(item)=>{
+        this.props.history.push({ pathname: "/main/account", state: { item } });
+    }
     buyCloth = (item) => {
         // const clothId = item._id;
         const { user } = this.props;
         if (user && user._id) {
             this.props.addProduct(item);
-        }else{
+        } else {
             message.error("无法加购，请先登录")
         }
 
@@ -71,14 +80,18 @@ class ClothingCard extends Component {
                                     }
                                     actions={
                                         [
+                                            <div> <IconFont type="iconbuynow" className="card-icon" onClick={() => { this.buyNow(item) }}></IconFont> </div>,
+                                            // <div> <IconFont type="iconprice" className="card-icon"></IconFont>{item.price} </div>,
                                             <PictureTwoTone onClick={() => { this.showDetail(item) }} />,
-                                            <ShoppingCartOutlined key="" onClick={() => { this.buyCloth(item) }} />
+                                            <ShoppingCartOutlined key="" onClick={() => { this.buyCloth(item) }} />,
+
                                         ]}
                                 >
                                     <Meta
                                         avatar={
                                             <span className="product-price">
-                                                ￥{item.price}
+                                                <IconFont type="iconprice" className="card-icon"></IconFont>
+                                                {item.price}
                                             </span>
                                         }
                                         title={item.name}

@@ -15,7 +15,6 @@ class ClothingDetail extends Component {
 
     render() {
         const itemValue = this.props.history.location.state.item
-        console.log("===========itemValue", itemValue)
         const title = (
             <span>
                 <Icon

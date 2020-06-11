@@ -47,7 +47,8 @@ function user(state = initUser, action) {
     case RESET_USER:
       return {}
     case MODIFY_USER:
-      return action.payload
+      const modifiedUser = action.payload
+      return { ...state, modifiedUser }
     default:
       return state
   }

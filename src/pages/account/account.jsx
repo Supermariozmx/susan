@@ -114,6 +114,8 @@ class Account extends Component {
         // },
         // ]
         const { products, selectProducts } = this.props.cart;
+         const itemValue = this.props.history.location.state.item
+        console.log("===========itemValue", itemValue)
         this.setState({ isLoadingAccountDetail: true })
         let sum = 0;
         const handledProducts = selectProducts ? selectProducts : products
