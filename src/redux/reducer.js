@@ -16,7 +16,8 @@ import {
   REMOVE_PRODUCT,
   CLEAR_CART,
   SET_NUMBER,
-  SELECT_PRODUCTS
+  SELECT_PRODUCTS,
+  MODIFY_USER
 } from './action-types'
 
 const initHeadTitle = ''
@@ -45,6 +46,8 @@ function user(state = initUser, action) {
       return { ...state, errorMsg }
     case RESET_USER:
       return {}
+    case MODIFY_USER:
+      return action.payload
     default:
       return state
   }
@@ -57,15 +60,15 @@ const initialState = {
 };
 
 function cart(state = initialState, action) {
+  let products = [...state.products];
+  let hasDouble = false;
   switch (action.type) {
     case ADD_PRODUCT:
       const newProduct = {
         ...action.payload,
         number: 1
       }
-      let products = [...state.products];
       if (products.length) {
-        let hasDouble = false;
         products.forEach((product) => {
           if (product._id === newProduct._id) {
             hasDouble = true;
@@ -88,11 +91,10 @@ function cart(state = initialState, action) {
           products: [newProduct]
         };
       }
-
     case REMOVE_PRODUCT:
       return {
         ...state,
-        products: handleRemoveProduct(state.products, action.id)
+        products: state.products.filter((product) => (product._id !== action.payload._id))
       }
     case CLEAR_CART:
       return {
@@ -109,9 +111,9 @@ function cart(state = initialState, action) {
         products: storeProducts
       }
     case SELECT_PRODUCTS:
-      return { 
+      return {
         ...state,
-        selectProducts: action.payload 
+        selectProducts: action.payload
       }
 
     default:

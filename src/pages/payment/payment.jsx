@@ -28,7 +28,7 @@ class PayMent extends Component {
                     </div>
 
                 </div>
-                <Button className="payment-button" onClick={() => { this.handlePaySuccess() }}>付款</Button>
+                <Button className="payment-button" type="dashed" onClick={() => { this.handlePaySuccess() }}>付款</Button>
             </div>
         )
     }

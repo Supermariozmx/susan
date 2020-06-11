@@ -14,7 +14,8 @@ import {
   CHANGE_PRODUCT_QUANTITY,
   CLEAR_CART,
   SET_NUMBER,
-  SELECT_PRODUCTS
+  SELECT_PRODUCTS,
+  MODIFY_USER
 } from './action-types'
 import { reqLogin } from '../api'
 import storageUtils from "../utils/storageUtils";
@@ -68,9 +69,10 @@ export const login = (username, password) => {
   }
 }
 
-
-// export const buyCloth = (products) => 
-// ({ type: ADD_PRODUCT, payload: products })
+export const ModifyUser = (user) => ({
+  type: MODIFY_USER,
+  payload: user
+})
 
 
 export const loadCart = products => ({
