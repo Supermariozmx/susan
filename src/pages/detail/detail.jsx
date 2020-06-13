@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, List, Icon } from 'antd'
+import { Card, List, Icon, Button } from 'antd'
 import { BASE_IMG_URL } from "../../utils/constants"
 import "./detail.less"
 
@@ -42,6 +42,10 @@ class ClothingDetail extends Component {
                             <span>{itemValue.price}元</span>
                         </Item>
                         <Item>
+                            <span className="left">商品库存:</span>
+                            <span>{itemValue.quantity ? itemValue.quantity : 2}件</span>
+                        </Item>
+                        <Item>
                             <span className="left">商品图片:</span>
                             <span>
                                 {
@@ -61,7 +65,8 @@ class ClothingDetail extends Component {
                             <span dangerouslySetInnerHTML={{ __html: itemValue.detail }}>
                             </span>
                         </Item>
-
+                        <Button>加购物车</Button>
+                        <Button>立即购买</Button>
                     </List>
                 </Card>
             </div>

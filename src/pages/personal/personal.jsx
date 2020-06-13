@@ -50,6 +50,7 @@ class PersonalCenter extends Component {
             if (result.status === 0) {
                 console.log("============req user", result)
                 this.setState({ renderData: result.data })
+                this.oldUser = result.data;
                 // renderData = result.data
             } else {
                 message.error("服务器出错，获取信息失败")
@@ -101,6 +102,10 @@ class PersonalCenter extends Component {
         console.log("=================modify data", user)
         this.form.resetFields()
         user._id = this.id
+        user.isAdmin = this.oldUser.isAdmin;
+        user.create_time = this.oldUser.create_time;
+        user.role_id = this.oldUser.role_id ? this.oldUser.role_id : ""
+
         // 2. 提交添加的请求
         const result = await reqAddOrUpdateUser(user)
 
@@ -212,35 +217,7 @@ class PersonalCenter extends Component {
                         user={renderData}
                     />
                 </Modal>
-                <TweenOne
-                    animation={{
-                        x: 80,
-                        scale: 0.5,
-                        rotate: 120,
-                        yoyo: false, // demo 演示需要
-                        repeat: 0, // demo 演示需要
-                        duration: 1000
-                    }}
-                    paused={this.props.paused}
-                    style={{ transform: 'translateX(-80px)' }}
-                    className="code-box-shape"
-                >
-                    <Button type="primary">test</Button>
-                </TweenOne>
 
-                <TweenOne animation={{
-                    bezier: {
-                        type: 'soft',
-                        autoRotate: true,
-                        vars: [
-                            { x: 150, y: 150 },
-                            { x: 300, y: 0 },
-                            { x: 450, y: 150 },
-                            { x: 600, y: 0 },
-                        ],
-                    }
-                }}
-                />
             </Card>
         )
     }

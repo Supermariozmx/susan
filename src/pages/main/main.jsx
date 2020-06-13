@@ -157,7 +157,7 @@ class Main extends Component {
                                 <Route component={NotFound} />
                             </Switch>
                         </Content>
-                        <Footer style={{ textAlign: 'center' }}>Anne.Zhang graduation project 2020</Footer>
+                        <Footer style={{ textAlign: 'center' }}>Mengxue.Zhang graduation project 2020</Footer>
                     </Layout>
                 </Layout>
 

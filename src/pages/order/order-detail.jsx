@@ -41,7 +41,7 @@ export default class OrderDetail extends Component {
             </span>
         )
         return (
-            <Card title={title} className='product-detail'>
+            <Card title={title} className='order-detail'>
                 <List>
                     <Item>
                         <span className="left">顾客名称:</span>

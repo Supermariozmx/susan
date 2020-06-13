@@ -35,8 +35,6 @@ class ClothingCard extends Component {
         const categoryId = categoryIdArray[4];
         const result = await reqVarietyProduct(categoryId)
         if (result.status === 0) {
-            // console.log("--------------------test anne result", result.data)
-            // this.data = result;
             this.setState({ renderData: result.data })
         } else {
             console.log("------------error")
@@ -46,11 +44,15 @@ class ClothingCard extends Component {
     showDetail = (item) => {
         this.props.history.push({ pathname: `/main/detail/${item._id}`, state: { item } });
     }
-    buyNow=(item)=>{
-        this.props.history.push({ pathname: "/main/account", state: { item } });
+    buyNow = (item) => {
+        const { user } = this.props;
+        if (user && user._id) {
+            this.props.history.push({ pathname: "/main/account", state: { item } });
+        } else {
+            message.error("无法立即购买，请先登录")
+        }
     }
     buyCloth = (item) => {
-        // const clothId = item._id;
         const { user } = this.props;
         if (user && user._id) {
             this.props.addProduct(item);
@@ -62,7 +64,6 @@ class ClothingCard extends Component {
     }
     render() {
         const { renderData } = this.state;
-        console.log("----------------------------renderData", renderData)
         return (
             <div className="product-cards">
                 {

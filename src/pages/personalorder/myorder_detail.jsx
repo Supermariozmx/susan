@@ -5,6 +5,7 @@ import {
     List
 } from 'antd'
 import LinkButton from '../../components/link-button'
+import "./personalorder.less"
 
 const Item = List.Item
 
@@ -19,7 +20,8 @@ export default class MyOrderDetail extends Component {
             statusDisplay = "待揽收"
         } else if (status === "transport") {
             statusDisplay = "物流中"
-
+        } else if (status === "cancel") {
+            statusDisplay = "取消付款"
         } else {
             statusDisplay = "已完成"
         }
@@ -61,7 +63,7 @@ export default class MyOrderDetail extends Component {
                         <span>{userAddress}</span>
                     </Item>
                     <Item>
-                        <span className="left">商品列表:</span>
+                        <span className="left">商品列表</span>
                         <div className="order-product-list">
                             {products ?
                                 products.map(item => (

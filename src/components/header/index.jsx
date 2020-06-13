@@ -19,48 +19,6 @@ const IconFont = Icon.createFromIconfontCN({
 
 });
 
-
-// const mockData = [{
-//   categoryId: "5eb7b9bbf70c283f343efc20",
-//   desc: "你就是最美的仙女",
-//   detail: "<p></p>↵",
-//   imgs: ["image-1590812451282.jpg"],
-//   name: "最美连衣裙",
-//   pCategoryId: "5eb7b987f70c283f343efc1d",
-//   price: 188,
-//   quantity: 9,
-//   status: 1,
-//   _id: "5eb7b968f70c283f343efc1c",
-//   number: 1
-// },
-// {
-//   categoryId: "5eb7b9bbf70c283f343efc20",
-//   desc: "复古、修身",
-//   detail: "<p></p>↵",
-//   imgs: ["image-1590812451282.jpg"],
-//   name: "复古连衣裙",
-//   pCategoryId: "5eb7b987f70c283f343efc1d",
-//   price: 188,
-//   quantity: 9,
-//   status: 1,
-//   _id: "test2",
-//   number: 1
-// },
-// {
-//   categoryId: "5eb7b9bbf70c283f343efc20",
-//   desc: "红色连衣裙",
-//   detail: "<p></p>↵",
-//   imgs: ["image-1590812451282.jpg"],
-//   name: "显瘦连衣裙",
-//   pCategoryId: "5eb7b987f70c283f343efc1d",
-//   price: 168,
-//   quantity: 9,
-//   status: 2,
-//   _id: "test3",
-//   number: 1
-// },
-// ]
-
 /*
 左侧导航的组件
  */
@@ -84,7 +42,8 @@ class HeaderView extends Component {
     weather: '', // 天气的文本
     isDrawerVisible: false,
     checked: false,
-    isPopupDisabled: true
+    isPopupDisabled: true,
+    selectProducts: []
   }
 
   // getTime = () => {
@@ -162,13 +121,7 @@ class HeaderView extends Component {
 
   onCartClick = () => {
     const { isDrawerVisible } = this.state;
-    const { products } = this.props.cart;
-    console.log("========cartproducts", products);
-    const productToAdd = this.props.cart.productToAdd;
-    console.log("99999999999999productToAdd", productToAdd)
     this.setState({ isDrawerVisible: !isDrawerVisible });
-    console.log("88888888888888cart", this.props.cart)
-    // this.handleProducts(products);
   };
   onDrawerClose = () => {
     this.setState({ isDrawerVisible: false });
@@ -177,7 +130,6 @@ class HeaderView extends Component {
   handleRemoveProduct = (product) => {
     const { removeProduct } = this.props;
     removeProduct(product);
-    console.log("remove=======product", product)
   }
   handleClear = () => {
     const { clearCart } = this.props;
@@ -185,6 +137,7 @@ class HeaderView extends Component {
   }
   handledMenu = () => {
     const { user } = this.props;
+    console.log("===============header user", user)
     return (
       <Menu onClick={() => { }}>
         <Menu.Item key="1" icon={<UserOutlined />}>
@@ -230,29 +183,26 @@ class HeaderView extends Component {
   handleProductNumber = (value, product) => {
     const { setProductNumber } = this.props;
     setProductNumber(value, product);
-    console.log("===================number", value);
-    console.log("-------------------order", product);
     product.number = value;
-    console.log("handled product ---------", product)
-
   }
   handleAccount = () => {
-    // const { user } = this.props;
-    // if (user && user.address && user.phone && user.username) {
-    //   this.setState({
-    //     isDrawerVisible: false
-    //   })
-    //   this.props.history.push("/main/account")
-    // } else {
-    //   message.error("信息不完善，无法购买，请完善信息")
-    // }
+    const { selectProducts } = this.state;
+    const { user } = this.props;
+    const { clearCart } = this.props;
+    if (user && user.address && user.phone && user.username) {
+      if (selectProducts.length > 0) {
+        this.setState({
+          isDrawerVisible: false
+        })
+        this.props.history.push("/main/account");
+        clearCart();
+      } else {
+        message.error("您未选择商品，无法进行结算")
+      }
 
-
-    this.setState({
-      isDrawerVisible: false
-    })
-    this.props.history.push("/main/account")
-
+    } else {
+      message.error("信息不完善，无法购买，请完善信息")
+    }
   }
   initColumns = () => {
     this.columns = [
@@ -311,14 +261,11 @@ class HeaderView extends Component {
     const rowSelection = {
       //可直接根据onChange来确定选择了哪行物品
       onChange: (selectedRowKeys, selectedRows) => {
-        console.log("===============onChange")
         selectProducts(selectedRows);
+        this.setState({ selectProducts: selectedRows });
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       },
-      // onSelect: (record, selected, selectedRows) => {
-      //   console.log("===============onSelect")
-      //   console.log(record, selected, selectedRows);
-      // },
+   
       onSelectAll: (selected, selectedRows) => {
         console.log("===============onSelectAll")
         console.log(selected, selectedRows);

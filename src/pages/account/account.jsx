@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
-import { Card, List, Icon, Avatar, Switch, Input, Button, message } from 'antd'
+import { Card, List, Icon, Avatar, Switch, Input, Button, message, Modal } from 'antd'
 import { BASE_IMG_URL } from "../../utils/constants"
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { addOrder } from '../../api'
 import "./account.less"
 
+const IconFont = Icon.createFromIconfontCN({
+    scriptUrl: '//at.alicdn.com/t/font_1818861_2jeeejr47tl.js',
+
+});
 
 class Account extends Component {
     constructor(props) {
@@ -17,7 +21,8 @@ class Account extends Component {
             receiverName: "",
             isLoadingAccountDetail: true,
             // isInfoFormatError: false
-            isReceiverInfoChanged: false
+            isReceiverInfoChanged: false,
+            isModalShow: false
         }
     }
 
@@ -44,17 +49,17 @@ class Account extends Component {
         console.log("--------------postInfo", postInfo);
     }
     handleReceiverItem = (key, value) => {
-        console.log("==============input value", value);
         this.setState({
             [key]: value
         })
     }
     handlePay = () => {
+        const itemValue = this.props.history.location.state ? [this.props.history.location.state.item] : []
         const { isReceiverInfoChanged, receiverAddress, receiverPhone, receiverName } = this.state
         const { user } = this.props;
         const { username, _id, address, phone } = user;
-        const { products, selectProducts } = this.props.cart;
-        const orderProducts = selectProducts ? selectProducts : products
+        const { selectProducts } = this.props.cart;
+        const orderProducts = itemValue.length > 0 ? itemValue : selectProducts
         const order = {
             userName: isReceiverInfoChanged ? receiverName : username,
             userId: _id,
@@ -68,69 +73,60 @@ class Account extends Component {
         this.props.history.push("/main/payment");
     }
 
+    handleCancel = () => {
+        this.setState({ isModalShow: true })
+    }
+    modalCancel = () => {
+        this.setState({ isModalShow: false })
+    }
+    modalConfirm = () => {
+        const itemValue = this.props.history.location.state ? [this.props.history.location.state.item] : []
+        const { isReceiverInfoChanged, receiverAddress, receiverPhone, receiverName } = this.state
+        const { user } = this.props;
+        const { username, _id, address, phone } = user;
+        const { selectProducts } = this.props.cart;
+        const orderProducts = itemValue.length > 0 ? itemValue : selectProducts
+        const order = {
+            userName: isReceiverInfoChanged ? receiverName : username,
+            userId: _id,
+            userPhone: isReceiverInfoChanged ? receiverPhone : phone,
+            userAddress: isReceiverInfoChanged ? receiverAddress : address,
+            orderPrice: this.totalMoney,
+            products: orderProducts,
+            status: "cancel",
+        }
+        addOrder(order)
+        this.props.history.goBack()
+    }
+
     componentDidMount() {
         this.handleMoney()
     }
 
     handleMoney = () => {
-        // const mockData = [{
-        //     categoryId: "5eb7b9bbf70c283f343efc20",
-        //     desc: "你就是最美的仙女",
-        //     detail: "<p></p>↵",
-        //     imgs: ["image-1590812451282.jpg"],
-        //     name: "最美连衣裙",
-        //     pCategoryId: "5eb7b987f70c283f343efc1d",
-        //     price: 188,
-        //     quantity: 9,
-        //     status: 1,
-        //     _id: "5eb7b968f70c283f343efc1c",
-        //     number: 1
-        // },
-        // {
-        //     categoryId: "5eb7b9bbf70c283f343efc20",
-        //     desc: "复古、修身",
-        //     detail: "<p></p>↵",
-        //     imgs: ["image-1590812451282.jpg"],
-        //     name: "复古连衣裙",
-        //     pCategoryId: "5eb7b987f70c283f343efc1d",
-        //     price: 188,
-        //     quantity: 9,
-        //     status: 1,
-        //     _id: "test2",
-        //     number: 1
-        // },
-        // {
-        //     categoryId: "5eb7b9bbf70c283f343efc20",
-        //     desc: "红色连衣裙",
-        //     detail: "<p></p>↵",
-        //     imgs: ["image-1590812451282.jpg"],
-        //     name: "显瘦连衣裙",
-        //     pCategoryId: "5eb7b987f70c283f343efc1d",
-        //     price: 168,
-        //     quantity: 9,
-        //     status: 2,
-        //     _id: "test3",
-        //     number: 1
-        // },
-        // ]
-        const { products, selectProducts } = this.props.cart;
-         const itemValue = this.props.history.location.state.item
-        console.log("===========itemValue", itemValue)
+        const { selectProducts } = this.props.cart;
+        const itemValue = this.props.history.location.state ? [this.props.history.location.state.item] : []
         this.setState({ isLoadingAccountDetail: true })
         let sum = 0;
-        const handledProducts = selectProducts ? selectProducts : products
-        if (handledProducts) {
-            handledProducts.forEach((item) => {
+        const handledProducts = itemValue.length > 0 ? itemValue : selectProducts
+        handledProducts.forEach((item) => {
+            if (item.number) {
                 sum = sum + item.price * item.number;
-            })
-        }
+            } else {
+                sum = item.price
+            }
 
+        })
         this.totalMoney = sum;
         this.setState({ isLoadingAccountDetail: false })
     }
+
+
     render() {
         const { isSwitchChecked, receiverAddress, receiverPhone, receiverName, isLoadingAccountDetail } = this.state;
-        const { products, selectProducts } = this.props.cart;
+        const { selectProducts } = this.props.cart;
+        const itemValue = this.props.history.location.state ? [this.props.history.location.state.item] : []
+
         const { user } = this.props;
         const title = (
             <span>
@@ -153,7 +149,7 @@ class Account extends Component {
                         loading={false}
                         itemLayout="horizontal"
                         // loadMore={loadMore}
-                        dataSource={selectProducts ? selectProducts : products}
+                        dataSource={itemValue.length > 0 ? itemValue : selectProducts}
                         renderItem={item => (
                             <List.Item
                             >
@@ -164,7 +160,7 @@ class Account extends Component {
                                     title={<span>{item.name}</span>}
                                     description={<span>{item.desc}</span>}
                                 />
-                                <div>{item.price}X{item.number}</div>
+                                <div>{item.price}X{item.number ? item.number : "1"}</div>
                             </List.Item>
                         )}
                     />
@@ -181,7 +177,7 @@ class Account extends Component {
                         <div className="modify-info-list">
                             <Input
                                 placeholder="请输入联系人"
-                                prefix={<Icon type='plus' />}
+                                prefix={<Icon type="user" />}
                                 value={receiverName}
                                 onChange={(e) => {
                                     this.handleReceiverItem("receiverName", e.target.value)
@@ -189,7 +185,7 @@ class Account extends Component {
                             />
                             <Input
                                 placeholder="请输入手机号"
-                                prefix={<Icon type='plus' />}
+                                prefix={<Icon type="phone" />}
                                 value={receiverPhone}
                                 onChange={(e) => {
                                     this.handleReceiverItem("receiverPhone", e.target.value)
@@ -197,7 +193,7 @@ class Account extends Component {
                             />
                             <Input
                                 placeholder="请输入地址"
-                                prefix={<Icon type='plus' />}
+                                prefix={<IconFont type="iconaddress1" />}
                                 value={receiverAddress}
                                 onChange={(e) => {
                                     this.handleReceiverItem("receiverAddress", e.target.value)
@@ -217,8 +213,16 @@ class Account extends Component {
                         </div>
                     }
                     <Button type="primary" className="account-footer-button" onClick={() => { this.handlePay() }} >确认付款</Button>
-                    <Button type="dashed" className="account-footer-button" >取消付款</Button>
+                    <Button type="dashed" className="account-footer-button" onClick={() => { this.handleCancel() }} >取消付款</Button>
                 </Card>
+                <Modal
+                    title="友情提示"
+                    visible={this.state.isModalShow}
+                    onOk={this.modalConfirm}
+                    onCancel={this.modalCancel}
+                >
+                    <p>您确认取消付款吗？</p>
+                </Modal>
             </div>
         )
     }

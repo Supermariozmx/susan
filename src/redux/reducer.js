@@ -48,7 +48,7 @@ function user(state = initUser, action) {
       return {}
     case MODIFY_USER:
       const modifiedUser = action.payload
-      return { ...state, modifiedUser }
+      return { ...state, ...modifiedUser }
     default:
       return state
   }
@@ -99,6 +99,7 @@ function cart(state = initialState, action) {
       }
     case CLEAR_CART:
       return {
+        ...state,
         products: []
       }
     case SET_NUMBER:
@@ -123,14 +124,7 @@ function cart(state = initialState, action) {
 }
 
 
-function handleRemoveProduct(products, id) {
-  const newItem = products.map((item) => {
-    if (item.id !== id) {
-      return item;
-    } else return null;
-  })
-  return newItem;
-}
+
 
 /*
 向外默认暴露的是合并产生的总的reducer函数

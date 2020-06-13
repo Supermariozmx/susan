@@ -58,6 +58,8 @@ class PersonalOrder extends Component {
                         orderStatus = "待揽收"
                     } else if (order.status === "transport") {
                         orderStatus = "物流中"
+                    } else if (order.status === "cancel") {
+                        orderStatus = "取消付款"
                     } else {
                         orderStatus = "已完成"
                     }
@@ -75,7 +77,6 @@ class PersonalOrder extends Component {
                         <span>
                             {/*将order对象使用state传递给目标路由组件*/}
                             <Button type="dashed" onClick={() => this.showDetail(order)}>详情</Button>
-
                         </span>
                     )
                 }
