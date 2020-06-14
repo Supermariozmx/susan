@@ -16,6 +16,7 @@ import ClothingDetail from "../detail/detail"
 import NotFound from '../not-found/not-found'
 import PayMent from '../payment/payment';
 import PersonalCenter from '../personal/personal';
+import PersonalFavorite from '../personal/myfavorite';
 import Account from '../account/account';
 import SuccessPay from '../successpay/successpay';
 import PersonalOrder from '../personalorder/personal_order';
@@ -150,10 +151,11 @@ class Main extends Component {
                                 <Route key="payment" path="/main/payment" component={PayMent} />,
                                 <Route path='/main/personal' component={PersonalCenter} />
                                 <Route path='/main/myorder' component={PersonalOrder} />
+                                <Route path='/main/myfavorite' component={PersonalFavorite}></Route>
                                 <Route key="order_detail" path="/main/orderdetail/:id" component={MyOrderDetail} />,
                                 <Route path='/main/account' component={Account} />
                                 <Route path='/main/successpay' component={SuccessPay} />
-                                
+
                                 <Route component={NotFound} />
                             </Switch>
                         </Content>

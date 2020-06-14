@@ -1,26 +1,21 @@
 import React, { PureComponent } from 'react'
-import {
-    Card,
-    Icon,
-    Form,
-    Input,
-    Button,
-    message
-} from 'antd'
-
-
+import { Card, Icon, Form, Input, Button, message, Select, Table, Avatar, InputNumber } from 'antd'
+import { BASE_IMG_URL } from '../../utils/constants'
 import LinkButton from '../../components/link-button'
-import {updateOrder } from '../../api'
+import { updateOrder } from '../../api'
 import memoryUtils from "../../utils/memoryUtils";
+import "./order.less"
 
 const { Item } = Form
 const { TextArea } = Input
-
+const Option = Select.Option;
 /*
 Product的添加和更新的子路由组件
  */
 class OrderUpdate extends PureComponent {
-
+    state = {
+        prductsData: []
+    }
     /*
     验证价格的自定义验证函数
      */
@@ -33,15 +28,16 @@ class OrderUpdate extends PureComponent {
         }
     }
 
-   
+
 
     submit = () => {
-        // 进行表单验证, 如果通过了, 才发送请求
+        const { prductsData } = this.state;
+        const products = prductsData;
         this.props.form.validateFields(async (error, values) => {
             if (!error) {
 
-                const { userName, userAddress, userPhone, orderPrice } = values
-                const order = { userName, userAddress, userPhone, orderPrice }
+                const { userName, userAddress, userPhone, orderPrice, status } = values
+                const order = { userName, userAddress, userPhone, orderPrice, status, products }
                 order._id = this.order._id
                 const result = await updateOrder(order)
                 if (result.status === 0) {
@@ -54,27 +50,110 @@ class OrderUpdate extends PureComponent {
         })
     }
 
-    // componentDidMount() {
-    //     this.getCategorys('0')
-    // }
 
     componentWillMount() {
         // 取出携带的state
         const order = memoryUtils.order
         this.order = order || {}
+        this.initColumns()
+
+    }
+    componentDidMount() {
+        const order = memoryUtils.order
+        this.order = order || {}
+        if (this.order) {
+            this.setState({ prductsData: order.products })
+        }
+
+    }
+    handleRemoveProduct = (product) => {
+
     }
 
-    /*
-    在卸载之前清除保存的数据
-    */
-    componentWillUnmount() {
-        memoryUtils.product = {}
+    handleProductNumber = (value, product) => {
+        const { prductsData } = this.state;
+        const handleProducts = prductsData
+        handleProducts.forEach((item) => {
+            if (item._id === product._id) {
+                item.number = value;
+            }
+        })
+        this.setState({ prductsData: handleProducts })
     }
+
+    handleProductPrice = (value, product) => {
+        const { prductsData } = this.state;
+        const handleProducts = prductsData
+        handleProducts.forEach((item) => {
+            if (item._id === product._id) {
+                item.price = value;
+            }
+        })
+        this.setState({ prductsData: handleProducts })
+    }
+
+    initColumns = () => {
+        this.columns = [
+            {
+                width: 130,
+                title: '',
+                render: (product) => {
+                    return (
+                        <div className="product-title">
+                            <span>{product.name}</span>
+                            <Avatar shape="square" className="header-action" size={32}
+                                src={BASE_IMG_URL + product.imgs[0]} />
+                        </div>
+                    )
+                }
+
+            },
+            {
+                title: '',
+                render: (product) => {
+                    return (
+                        <div className="order-update-action">
+                            <InputNumber
+                                size="small"
+                                className="product-number"
+                                min={1}
+                                max={product.quantity}
+                                defaultValue={product.number}
+                                onChange={(value) => { this.handleProductNumber(value, product) }} />
+                            <span> 件</span>
+                        </div>
+                    )
+                }
+            },
+            {
+                title: '',
+                render: (product) => {
+                    return (
+                        <div className="order-update-action">
+                            <span>￥</span>
+                            <InputNumber
+                                min={1}
+                                max={1000000}
+                                defaultValue={product.price}
+                                onChange={(value) => { this.handleProductPrice(value, product) }
+                                } />
+                        </div>
+                    )
+                }
+            },
+        ];
+    }
+
+
+    selectOrderStatus = (value, selectedOptions) => {
+        console.log(value, selectedOptions);
+    }
+
 
     render() {
 
 
-        const { userName, userAddress, userPhone, orderPrice } = memoryUtils.order
+        const { userName, userAddress, userPhone, orderPrice, products } = memoryUtils.order
         // 用来接收级联分类ID的数组
 
 
@@ -93,7 +172,6 @@ class OrderUpdate extends PureComponent {
                 <span>修改订单</span>
             </span>
         )
-
         const { getFieldDecorator } = this.props.form
 
         return (
@@ -130,29 +208,21 @@ class OrderUpdate extends PureComponent {
                                     { pattern: /^1[3|4|5|8][0-9]\d{4,8}$/, message: '手机号格式不正确' },
 
                                 ]
-                            })(<Input type='number' placeholder='请输入顾客电话' />)
+                            })(<Input placeholder='请输入顾客电话' />)
                         }
                     </Item>
 
+                    <Item label="商品详情">
+                        <Table
+                            showHeader={false}
+                            bordered={false}
+                            rowKey='_id'
+                            dataSource={products}
+                            columns={this.columns}
+                            pagination={false}>
 
-
-
-                    {/* <Item label="购买商品">
-                        {
-                            getFieldDecorator('products', {
-                                initialValue: products[0].productName,
-                                rules: [
-                                    { required: true, message: '必须输入付款金额' },
-                                    { validator: this.validatePrice }
-
-                                ]
-                            })(<Cascader
-                                placeholder='请指定商品分类'
-                                options={this.state.options} 
-                                loadData={this.loadData} 
-                            />)
-                        }
-                    </Item> */}
+                        </Table>
+                    </Item>
 
 
                     <Item label="付款金额">
@@ -164,7 +234,25 @@ class OrderUpdate extends PureComponent {
                                     { validator: this.validatePrice }
 
                                 ]
-                            })(<Input placeholder="必须输入付款金额" />)
+                            })(<Input placeholder="必须输入付款金额" type='number' />)
+                        }
+
+                    </Item>
+
+                    <Item label="状态">
+                        {
+                            getFieldDecorator('status', {
+                                 rules: [
+                                    { required: true, message: '必须选择订单状态' },
+                                ]
+                            })(<Select
+                                placeholder='更改订单状态'
+                                onChange={this.selectOrderStatus}
+                                defaultValue="transport"
+                            >
+                                <Option value="transport">物流中</Option>
+                                <Option value="finished">派送中</Option>
+                            </Select>)
                         }
 
                     </Item>

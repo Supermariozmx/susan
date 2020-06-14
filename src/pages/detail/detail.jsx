@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
-import { Card, List, Icon, Button } from 'antd'
+import { Card, List, Icon, Button, message } from 'antd'
 import { BASE_IMG_URL } from "../../utils/constants"
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import { addProduct } from '../../redux/actions'
 import "./detail.less"
 
 const Item = List.Item
@@ -12,7 +15,22 @@ class ClothingDetail extends Component {
         }
     }
 
-
+    addToCart = (item) => {
+        const { user } = this.props;
+        if (user && user._id) {
+            this.props.addProduct(item);
+        } else {
+            message.error("无法加购，请先登录")
+        }
+    }
+    buyNow = (item) => {
+        const { user } = this.props;
+        if (user && user._id) {
+            this.props.history.push({ pathname: "/main/account", state: { item } });
+        } else {
+            message.error("无法立即购买，请先登录")
+        }
+    }
     render() {
         const itemValue = this.props.history.location.state.item
         const title = (
@@ -65,13 +83,17 @@ class ClothingDetail extends Component {
                             <span dangerouslySetInnerHTML={{ __html: itemValue.detail }}>
                             </span>
                         </Item>
-                        <Button>加购物车</Button>
-                        <Button>立即购买</Button>
+                        <div className="action-button">
+                            <Button className="action-add-cart" onClick={() => this.addToCart(itemValue)}>加购物车</Button>
+                            <Button onClick={() => { this.buyNow(itemValue) }}>立即购买</Button>
+                        </div>
                     </List>
                 </Card>
             </div>
         )
     }
 }
-
-export default ClothingDetail;
+export default connect(
+    state => ({ headTitle: state.headTitle, user: state.user, cart: state.cart }),
+    { addProduct }
+)(withRouter(ClothingDetail))

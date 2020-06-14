@@ -3,7 +3,7 @@ import { Card, List, Icon, Avatar, Switch, Input, Button, message, Modal } from 
 import { BASE_IMG_URL } from "../../utils/constants"
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { addOrder } from '../../api'
+import { addOrder, reqAddOrUpdateProduct } from '../../api'
 import "./account.less"
 
 const IconFont = Icon.createFromIconfontCN({
@@ -60,17 +60,32 @@ class Account extends Component {
         const { username, _id, address, phone } = user;
         const { selectProducts } = this.props.cart;
         const orderProducts = itemValue.length > 0 ? itemValue : selectProducts
+        const handledData = orderProducts
+        console.log("-------------------商品信息", orderProducts)
+        handledData.forEach((item) => {
+            item.quantity = item.quantity - item.number;
+            console.log("-------------item",item)
+        })
+        console.log("===============看看变美边",handledData);
+        handledData.forEach((item)=>{
+            reqAddOrUpdateProduct(item).then((data) => {
+                console.log("---------------更新商品库存", data)
+            })
+        })
+
+
         const order = {
             userName: isReceiverInfoChanged ? receiverName : username,
             userId: _id,
             userPhone: isReceiverInfoChanged ? receiverPhone : phone,
             userAddress: isReceiverInfoChanged ? receiverAddress : address,
             orderPrice: this.totalMoney,
-            products: orderProducts,
+            products: handledData,
             status: "paid",
         }
         addOrder(order)
         this.props.history.push("/main/payment");
+
     }
 
     handleCancel = () => {

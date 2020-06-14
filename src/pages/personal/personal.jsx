@@ -66,31 +66,13 @@ class PersonalCenter extends Component {
         })
     }
 
-    // handleModifyUser = () => {
-    //     // 进行表单验证, 如果通过了, 才发送请求
-    //     this.props.form.validateFields(async (error, values) => {
-    //         // const user = this.form.getFieldsValue()
-    //         const imgs = this.pw.current.getImgs()
-    //         const { username, email, phone, address } = values
-    //         const user = { username, email, phone, address, imgs }
-    //         if (!error) {
-    //             user._id = this.id
-    //             const result = await reqAddOrUpdateUser(user)
-    //             if (result.status === 0) {
-    //                 message.success("更新信息成功")
-    //                 this.props.history.goBack()
-    //             } else {
-    //                 message.error("更新信息失败")
-    //             }
-    //         }
-    //     })
-    // }
-
-
     handlePersonalOrder = () => {
         this.props.history.push("/main/myorder")
     }
 
+    handlePersonalFavorite = () => {
+        this.props.history.push("/main/myfavorite")
+    }
 
     handleUpdateUser = async () => {
         const { ModifyUser } = this.props;
@@ -121,9 +103,6 @@ class PersonalCenter extends Component {
     }
 
 
-
-
-
     handleCancel = () => this.setState({ previewVisible: false })
 
     handlePreview = (file) => {
@@ -136,21 +115,6 @@ class PersonalCenter extends Component {
     handleChange = ({ fileList }) => this.setState({ fileList })
 
     render() {
-        // const mockUser = {
-        //     "_id": "5eddd02d62af5b1efcedf63a",
-        //     "isAdmin": true,
-        //     "imgs": ["image-1589345440541.jpg"],
-        //     "username": "zane",
-        //     "password": "e10adc3949ba59abbe56e057f20f883e",
-        //     "phone": "18898089999",
-        //     "email": "1469080717@qq.com",
-        //     "role_id": "5eb7ba24f70c283f343efc23",
-        //     "create_time": 1591595053071,
-        //     "address": "法国巴黎",
-        //     "__v": 0
-        // }
-        // const { getFieldDecorator } = this.props.form
-        // const { imgs } = this.props.user
         const { renderData, isModalShow } = this.state;
         const { username, phone, email, address, imgs } = renderData;
 
@@ -198,7 +162,8 @@ class PersonalCenter extends Component {
                         <p>默认地址：{address}</p>
                         <div className="my-action">
                             <Button type='primary' className="modify-data" onClick={() => { this.handleModalShow() }}>修改资料</Button>
-                            <Button type='dashed' onClick={() => { this.handlePersonalOrder() }}>我的订单</Button>
+                            <Button type='dashed' className="modify-data" onClick={() => { this.handlePersonalOrder() }}>我的订单</Button>
+                            <Button type='dashed' onClick={() => { this.handlePersonalFavorite() }}>我的收藏</Button>
                         </div>
                     </div>
                 </div>

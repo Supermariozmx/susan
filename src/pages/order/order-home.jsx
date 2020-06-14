@@ -53,10 +53,19 @@ export default class OrderHome extends Component {
                 title: '状态',
                 // dataIndex: 'status',
                 render: (order) => {
+                    let orderStatus = ""
+                    if (order.status === "paid") {
+                        orderStatus = "待揽收"
+                    } else if (order.status === "transport") {
+                        orderStatus = "物流中"
+                    } else if (order.status === "cancel") {
+                        orderStatus = "取消付款"
+                    } else {
+                        orderStatus = "已完成"
+                    }
                     return (
-                        <span>
-                            <span>物流中</span>
-                        </span>
+                        <span>{orderStatus}</span>
+
                     )
                 }
             },

@@ -39,6 +39,8 @@ export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/produ
 // 获取不同种类商品
 export const reqVarietyProduct = (categoryId) => ajax(BASE + '/main/product/category', { categoryId })
 
+//搜索商品
+export const reqVarietySearchProducts = (categoryId, searchName, searchType) => ajax(BASE + '/main/product/category/search', { categoryId, [searchType]: searchName})
 /*
 搜索商品分页列表 (根据商品名称/商品描述)
 searchType: 搜索的类型, productName/productDesc
@@ -55,6 +57,7 @@ export const reqSearchProducts = ({ pageNum, pageSize, searchName, searchType })
   pageSize,
   productDesc: searchName,
 })*/
+
 
 // 删除指定名称的图片
 export const reqDeleteImg = (name) => ajax(BASE + '/manage/img/delete', { name }, 'POST')
@@ -132,7 +135,7 @@ export const reqSearchOrders = ({ pageNum, pageSize, searchName, searchType }) =
   [searchType]: searchName,
 })
 
-// 获取商品分页列表
+// 获取订单分页列表
 export const reqOrders = (pageNum, pageSize) => ajax(BASE + '/manage/order/list', { pageNum, pageSize })
 
 // 更新订单的状态
@@ -141,7 +144,19 @@ export const updateOderStatus = (orderId, status) => ajax(BASE + '/manage/order/
 //修改订单内容
 export const updateOrder = (order) => ajax(BASE + '/manage/order/update', order, 'POST')
 
+//生成新的订单
 export const addOrder = (order) => ajax(BASE + '/manage/order/add', order, 'POST')
 
-export const reqPersonalOrder = (userId) => ajax(BASE + '/manage/order/personal', {userId })
+//查询用户的个人订单
+export const reqPersonalOrder = (userId) => ajax(BASE + '/manage/order/personal', { userId })
+
+
+//获取用户的个人收藏
+export const reqPersonalFavorites = (userId) => ajax(BASE + '/personal/favorites/list', { userId })
+
+//用户添加收藏
+export const persoanlAddFavorite = (userId, product) => ajax(BASE + '/personal/favorites/add', { userId, product }, 'POST')
+
+//用户取消收藏
+export const persoanlCancelFavorite = (userId, product) => ajax(BASE + '/personal/favorites/delete', { userId, product }, 'POST')
 

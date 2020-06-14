@@ -204,6 +204,15 @@ class HeaderView extends Component {
       message.error("信息不完善，无法购买，请完善信息")
     }
   }
+  handlePersonal = () => {
+    const { user } = this.props;
+    if (user && user._id) {
+      this.props.history.push("/main/personal")
+    }else{
+      message.error("您未登录，无法进入个人中心")
+    }
+
+  }
   initColumns = () => {
     this.columns = [
       {
@@ -265,7 +274,7 @@ class HeaderView extends Component {
         this.setState({ selectProducts: selectedRows });
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       },
-   
+
       onSelectAll: (selected, selectedRows) => {
         console.log("===============onSelectAll")
         console.log(selected, selectedRows);
@@ -299,7 +308,7 @@ class HeaderView extends Component {
             >
             </IconFont> */}
             <ShoppingCartOutlined className="action-item header-action" onClick={() => { this.onCartClick() }} />
-            <Avatar shape="square" className="header-action" size={32} src={personal} onClick={() => { this.props.history.push("/main/personal") }} />
+            <Avatar shape="square" className="header-action" size={32} src={personal} onClick={() => { this.handlePersonal() }} />
           </div>
         </div>
         <div className="header-bottom">
