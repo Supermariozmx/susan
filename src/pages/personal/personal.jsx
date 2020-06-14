@@ -8,26 +8,43 @@ import ModifyPersonalForm from "./modify-personal"
 import TweenOne from 'rc-tween-one';
 import PropTypes from 'prop-types';
 import "./personal.less"
+import { reqDeleteImg } from '../../api'
+import { BASE_IMG_URL } from "../../utils/constants";
 import BezierPlugin from 'rc-tween-one/lib/plugin/BezierPlugin';
 TweenOne.plugins.push(BezierPlugin);
+
+
+
+// const IconFont = Icon.createFromIconfontCN({
+//     scriptUrl: '//at.alicdn.com/t/font_1818861_07ln9qi4efv.js',
+
+// });
 
 class PersonalCenter extends Component {
     constructor(props) {
         super(props);
+
+        let fileList = []
+
+        // 如果传入了imgs属性
+        const { imgs } = this.props.user
+        if (imgs && imgs.length > 0) {
+            fileList = imgs.map((img, index) => ({
+                uid: -index, // 每个file都有自己唯一的id
+                name: img, // 图片文件名
+                status: 'done', // 图片状态: done-已上传, uploading: 正在上传中, removed: 已删除
+                url: BASE_IMG_URL + img
+            }))
+        }
+
         this.state = {
             isSwitchOn: true,
             renderData: {},
             isModalShow: false,
 
-
-            previewVisible: false,
-            previewImage: '',
-            fileList: [{
-                uid: -1,
-                name: 'xxx.png',
-                status: 'done',
-                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            }],
+            previewVisible: false, // 标识是否显示大图预览Modal
+            previewImage: '', // 大图的url
+            fileList // 所有已上传图片的数组
         }
 
         this.pw = React.createRef()
@@ -103,16 +120,60 @@ class PersonalCenter extends Component {
     }
 
 
-    handleCancel = () => this.setState({ previewVisible: false })
+    handlePreviewCancel = () => this.setState({ previewVisible: false })
 
-    handlePreview = (file) => {
+    handleAvatarPreview = (file) => {
         this.setState({
             previewImage: file.url || file.thumbUrl,
             previewVisible: true,
         });
     }
 
-    handleChange = ({ fileList }) => this.setState({ fileList })
+
+    handleAvatarChange = async ({ file, fileList }) => {
+        console.log('handleChange()', file.status, fileList.length, file === fileList[fileList.length - 1])
+
+        // 一旦上传成功, 将当前上传的file的信息修正(name, url)
+        if (file.status === 'done') {
+            const result = file.response  // {status: 0, data: {name: 'xxx.jpg', url: '图片地址'}}
+            console.log("--------------------hanlde avatar change", result)
+            if (result.status === 0) {
+                message.success('上传图片成功!')
+                const { name, url } = result.data
+                file = fileList[fileList.length - 1]
+                file.name = name
+                file.url = url
+            } else {
+                message.error('上传图片失败')
+            }
+        } else if (file.status === 'removed') { // 删除图片
+            const result = await reqDeleteImg(file.name)
+            if (result.status === 0) {
+                message.success('删除图片成功!')
+            } else {
+                message.error('删除图片失败!')
+            }
+        }
+
+        // 在操作(上传/删除)过程中更新fileList状态
+        this.setState({ fileList })
+    };
+
+    saveAvatar = async () => {
+        const { ModifyUser } = this.props;
+        this.setState({ isModalShow: false })
+        const { user } = this.props
+        user.imgs = this.state.fileList.map(file => file.name)
+        console.log("=================modify avatar", user)
+        const result = await reqAddOrUpdateUser(user)
+        if (result.status === 0) {
+            message.success("成功修改头像")
+            ModifyUser(user)
+            this.handleRequestUser()
+        } else {
+            message.error("更新头像失败")
+        }
+    }
 
     render() {
         const { renderData, isModalShow } = this.state;
@@ -142,17 +203,30 @@ class PersonalCenter extends Component {
                 <div className="my-info">
                     <div className="my-avatar">
                         <Upload
-                            action="//jsonplaceholder.typicode.com/posts/"
-                            listType="picture-card"
-                            fileList={fileList}
-                            onPreview={this.handlePreview}
-                            onChange={this.handleChange}
+                            action="/manage/img/upload" /*上传图片的接口地址*/
+                            accept='image/*'  /*只接收图片格式*/
+                            name='image' /*请求参数名*/
+                            listType="picture-card"  /*卡片样式*/
+                            fileList={fileList}  /*所有已上传图片文件对象的数组*/
+                            onPreview={this.handleAvatarPreview}
+                            onChange={this.handleAvatarChange}
                         >
                             {fileList.length >= 1 ? null : uploadButton}
                         </Upload>
-                        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                        {/* <Tooltip placement="topLeft" title="保存头像" arrowPointAtCenter>
+                            <IconFont
+                                type="iconsave"
+                                className="save-avatar"
+                                onClick={() => { this.saveAvatar() }}
+                            >
+                            </IconFont>
+                        </Tooltip>, */}
+                        <Button type="dashed" className="save-avatar" onClick={() => { this.saveAvatar() }} >保存头像</Button>
+
+                        <Modal visible={previewVisible} footer={null} onCancel={this.handlePreviewCancel}>
                             <img alt="example" style={{ width: '100%' }} src={previewImage} />
                         </Modal>
+
                     </div>
                     <div className="my-des">
                         <h3>我的资料</h3>

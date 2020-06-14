@@ -6,8 +6,8 @@ import { reqAddOrUpdateUser } from "../../api/index";
 
 const IconFont = Icon.createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_1818861_2jeeejr47tl.js',
-    
-  });
+
+});
 
 const Item = Form.Item
 
@@ -18,7 +18,8 @@ class Register extends Component {
         phone: "",
         email: "",
         create_time: Date.now,
-        isAdmin: false
+        isAdmin: false,
+        storePwd: ""
     }
     validatePwd = (rule, value, callback) => {
         console.log('validatePwd()', rule, value)
@@ -36,6 +37,13 @@ class Register extends Component {
         // callback('xxxx') // 验证失败, 并指定提示的文本
     }
 
+    handleComparePwd = (repeatPwd) => {
+        const { storePwd } = this.state
+        if (repeatPwd !== storePwd) {
+            message.error("密码和确认密码不一致，请确认")
+        }
+
+    }
     handleSubmit = async (event) => {
 
         // 阻止事件的默认行为
@@ -50,7 +58,7 @@ class Register extends Component {
                 if (result.status === 0) {
                     message.success('注册成功')
                     this.props.history.push('./login')
-                }else{
+                } else {
                     message.error(`${result.msg}`)
                 }
             } else {
@@ -103,30 +111,21 @@ class Register extends Component {
                                         prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                         type="password"
                                         placeholder="密码"
-
+                                        value={this.state.storePwd}
+                                        onChange={(e) => { this.setState({ storePwd: e.target.value }) }}
                                     />
                                 )
                             }
 
                         </Form.Item>
                         <Form.Item className="register-item">
-                            {
-                                getFieldDecorator('repeatpassword', {
-                                    rules: [
-                                        {
-                                            validator: this.validatePwd
-                                        }
-                                        // { pattern: /^[a-zA-Z0-9_]+$/, message: '确认密码长度不能大于16位' },
-                                    ]
-                                })(
-                                    <Input
-                                        prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                        type="password"
-                                        placeholder="确认密码"
+                            <Input
+                                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                type="password"
+                                placeholder="确认密码"
+                                onBlur={(e) => { this.handleComparePwd(e.target.value) }}
 
-                                    />
-                                )
-                            }
+                            />
 
                         </Form.Item>
 
@@ -190,16 +189,16 @@ class Register extends Component {
                            </Button>
                         </Form.Item>
                         <div className="register-footer-link">
-                        <p className="register-back-home" 
-                        onClick={()=>{this.props.history.push('./main')}}>
-                            回到首页
+                            <p className="register-back-home"
+                                onClick={() => { this.props.history.push('./main') }}>
+                                回到首页
                         </p>
-                        <p className="register-back-login" 
-                        onClick={()=>{this.props.history.push('./login')}}>
-                            已有账号？
+                            <p className="register-back-login"
+                                onClick={() => { this.props.history.push('./login') }}>
+                                已有账号？
                         </p>
                         </div>
-                       
+
                     </Form>
                 </section>
             </div>

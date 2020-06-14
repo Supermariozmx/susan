@@ -123,15 +123,6 @@ class ClothingCard extends Component {
                         renderData ? renderData.map((item) => {
                             return (
                                 <div className="product-card">
-                                    {/* <Select
-                                    value={searchType}
-                                    style={{ width: 150 }}
-                                    onChange={value => this.setState({ searchType: value })}
-                                >
-                                    <Option value='productName'>按名称搜索</Option>
-                                    <Option value='productDesc'>按描述搜索</Option>
-                                </Select> */}
-
                                     < Card
                                         style={{ width: 300 }
                                         }

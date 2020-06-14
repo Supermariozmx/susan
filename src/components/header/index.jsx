@@ -4,8 +4,8 @@ import { Modal, Icon, Drawer, Avatar, Button, Dropdown, Menu, Popconfirm, Table,
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { ShoppingCartOutlined, DownOutlined, UserOutlined } from '@ant-design/icons';
-import personal from '../../assets/images/personal.jpg';
 import { BASE_IMG_URL } from '../../utils/constants'
+import personal from '../../assets/images/personal.jpg';
 // import LinkButton from '../link-button'
 import { reqWeather } from '../../api'
 import menuList from '../../config/menuConfig'
@@ -208,7 +208,7 @@ class HeaderView extends Component {
     const { user } = this.props;
     if (user && user._id) {
       this.props.history.push("/main/personal")
-    }else{
+    } else {
       message.error("您未登录，无法进入个人中心")
     }
 
@@ -265,6 +265,7 @@ class HeaderView extends Component {
     const { currentTime, dayPictureUrl, weather, isDrawerVisible } = this.state
 
     const username = this.props.user.username
+    const imgs = this.props.user.imgs
     const products = this.props.cart.products;
     const { selectProducts } = this.props;
     const rowSelection = {
@@ -308,7 +309,10 @@ class HeaderView extends Component {
             >
             </IconFont> */}
             <ShoppingCartOutlined className="action-item header-action" onClick={() => { this.onCartClick() }} />
-            <Avatar shape="square" className="header-action" size={32} src={personal} onClick={() => { this.handlePersonal() }} />
+            <Avatar shape="square" className="header-action"
+              size={32}
+              src={imgs ? BASE_IMG_URL + imgs[0] : personal}
+              onClick={() => { this.handlePersonal() }} />
           </div>
         </div>
         <div className="header-bottom">

@@ -18,6 +18,8 @@ export function reqLogin(username, password) {
 }*/
 export const reqLogin = (username, password) => ajax(BASE + '/login', { username, password }, 'POST')
 
+export const comparePassword = (username, password) => ajax(BASE + '/compare', { username, password }, 'POST')
+
 // 获取一级/二级分类的列表
 export const reqCategorys = (parentId) => ajax(BASE + '/manage/category/list', { parentId })
 
@@ -40,7 +42,7 @@ export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/produ
 export const reqVarietyProduct = (categoryId) => ajax(BASE + '/main/product/category', { categoryId })
 
 //搜索商品
-export const reqVarietySearchProducts = (categoryId, searchName, searchType) => ajax(BASE + '/main/product/category/search', { categoryId, [searchType]: searchName})
+export const reqVarietySearchProducts = (categoryId, searchName, searchType) => ajax(BASE + '/main/product/category/search', { categoryId, [searchType]: searchName })
 /*
 搜索商品分页列表 (根据商品名称/商品描述)
 searchType: 搜索的类型, productName/productDesc
