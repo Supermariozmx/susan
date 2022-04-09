@@ -18,7 +18,7 @@
     "jsonp": "^0.2.1",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
-    "moment": "2.24.0",
+    "moment": "2.29.2",
     "prop-types": "^15.7.2",
     "rc-tween-one": "^2.7.2",
     "react": "^16.8.6",
